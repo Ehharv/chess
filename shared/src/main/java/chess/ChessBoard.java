@@ -85,7 +85,6 @@ public class ChessBoard {
         this.addPiece(new ChessPosition(8,6), new ChessPiece(ChessGame.TeamColor.BLACK, BISHOP));
         this.addPiece(new ChessPosition(8,7), new ChessPiece(ChessGame.TeamColor.BLACK, KNIGHT));
         this.addPiece(new ChessPosition(8,8), new ChessPiece(ChessGame.TeamColor.BLACK, ROOK));
-        this.toString();
 
 
     }
