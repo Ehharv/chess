@@ -13,10 +13,10 @@ public class RookCalculator implements MoveCalculator {
         ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
         Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
 
-        CalcFunctions.checkUp(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkDown(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkLeft(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkRight(board, myPosition, color, validMoves, row, col);
+        CalcFunctions.checkUp(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkDown(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkLeft(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkRight(board, myPosition, color, validMoves, row, col,8);
 
         return validMoves;
     }

@@ -12,10 +12,10 @@ public class BishopCalculator implements MoveCalculator {
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
 
-        CalcFunctions.checkLowerLeft(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkLowerRight(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkUpperRight(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkUpperLeft(board, myPosition, color, validMoves, row, col);
+        CalcFunctions.checkLowerLeft(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkLowerRight(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkUpperRight(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkUpperLeft(board, myPosition, color, validMoves, row, col,8);
 
         return validMoves;
     }

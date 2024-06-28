@@ -15,17 +15,15 @@ public class QueenCalculator implements MoveCalculator {
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
 
-        CalcFunctions.checkUp(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkDown(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkLeft(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkRight(board, myPosition, color, validMoves, row, col);
+        CalcFunctions.checkLowerLeft(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkLowerRight(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkUpperRight(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkUpperLeft(board, myPosition, color, validMoves, row, col,8);
 
-        CalcFunctions.checkLowerLeft(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkLowerRight(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkUpperRight(board, myPosition, color, validMoves, row, col);
-        CalcFunctions.checkUpperLeft(board, myPosition, color, validMoves, row, col);
-
-
+        CalcFunctions.checkUp(board, myPosition, color, validMoves, row, col, 8);
+        CalcFunctions.checkDown(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkLeft(board, myPosition, color, validMoves, row, col,8);
+        CalcFunctions.checkRight(board, myPosition, color, validMoves, row, col,8);
 
         return validMoves;
     }
