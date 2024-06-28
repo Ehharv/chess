@@ -1,5 +1,8 @@
 package chess;
 
+import chess.moveCalculator.BishopCalculator;
+import chess.moveCalculator.MoveCalculator;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -52,7 +55,30 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>();
+        MoveCalculator calculator;
+        switch (type) {
+            case BISHOP:
+                calculator = new BishopCalculator();
+                break;
+//            case KING:
+//                calculator = new KingCalculator();
+//                break;
+//            case QUEEN:
+//                calculator = new QueenCalculator();
+//                break;
+//            case ROOK:
+//                calculator = new RookCalculator();
+//                break;
+//            case KNIGHT:
+//                calculator = new KnightCalculator();
+//                break;
+//            case PAWN:
+//                calculator = new PawnCalculator();
+//                break;
+            default:
+                calculator = new BishopCalculator();
+        }
+        return calculator.pieceMoves(board, myPosition);
     }
 
     @Override
