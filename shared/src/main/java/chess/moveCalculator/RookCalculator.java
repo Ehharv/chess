@@ -12,7 +12,15 @@ public class RookCalculator implements MoveCalculator {
         ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
         Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
 
-        // up
+        checkUp(board, myPosition, color, validMoves, row, col);
+        checkDown(board, myPosition, color, validMoves, row, col);
+        checkLeft(board, myPosition, color, validMoves, row, col);
+        checkRight(board, myPosition, color, validMoves, row, col);
+
+        return validMoves;
+    }
+
+    private void checkUp(ChessBoard board,ChessPosition myPosition,ChessGame.TeamColor color,Collection<ChessMove> validMoves,int row,int col){
         for(int i = row + 1; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(i, col);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -24,9 +32,9 @@ public class RookCalculator implements MoveCalculator {
                 break;
             }
         }
+    }
 
-
-        // down
+    private void checkDown(ChessBoard board,ChessPosition myPosition,ChessGame.TeamColor color,Collection<ChessMove> validMoves,int row,int col){
         for(int i = row - 1; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(i, col);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -38,8 +46,9 @@ public class RookCalculator implements MoveCalculator {
                 break;
             }
         }
+    }
 
-        // left
+    private void checkLeft(ChessBoard board,ChessPosition myPosition,ChessGame.TeamColor color,Collection<ChessMove> validMoves,int row,int col){
         for(int i = col - 1; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(row, i);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -51,8 +60,9 @@ public class RookCalculator implements MoveCalculator {
                 break;
             }
         }
+    }
 
-        // right
+    private void checkRight(ChessBoard board,ChessPosition myPosition,ChessGame.TeamColor color,Collection<ChessMove> validMoves,int row,int col){
         for(int i = col + 1; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(row, i);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -64,7 +74,5 @@ public class RookCalculator implements MoveCalculator {
                 break;
             }
         }
-
-        return validMoves;
     }
 }
