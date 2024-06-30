@@ -68,9 +68,9 @@ public class ChessPiece {
             case ROOK:
                 calculator = new RookCalculator();
                 break;
-//            case KNIGHT:
-//                calculator = new KnightCalculator();
-//                break;
+            case KNIGHT:
+                calculator = new KnightCalculator();
+                break;
             case PAWN:
                 calculator = new PawnCalculator();
                 break;

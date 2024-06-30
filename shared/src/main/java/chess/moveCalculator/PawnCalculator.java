@@ -71,58 +71,6 @@ public class PawnCalculator implements MoveCalculator{
                 }
             }
         }
-
-
-
-
-
-       /* if(color == ChessGame.TeamColor.BLACK) {
-            if(row == 7){
-                CalcFunctions.checkDown(board, myPosition, color, validMoves, row, col, 2); // move 2 for first time
-            }else if(row == 2){ // promotion
-                int newRow = --row;
-                ChessPosition diagonalPositionL = new ChessPosition(newRow , --col);
-                ChessPosition diagonalPositionR = new ChessPosition(newRow, ++col);
-                ChessPosition newPosition = new ChessPosition(newRow, col);
-
-                if(board.getPiece(newPosition) == null) {
-                    validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.QUEEN));
-                    validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.BISHOP));
-                    validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.KNIGHT));
-                    validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.ROOK));
-                }
-            }
-             // black pawns move down
-            for(int i = row - 1; i >= 1; i--) {
-                ChessPosition newPosition = new ChessPosition(i, col);
-                ChessPosition diagonalPositionL = new ChessPosition(i , --col);
-                ChessPosition diagonalPositionR = new ChessPosition(i, ++col);
-                if(board.getPiece(newPosition) == null){ // empty space
-                    validMoves.add(new ChessMove(myPosition, newPosition, null));
-
-                } else if (board.getPiece(diagonalPositionL).getTeamColor() != color){ // enemy to the left
-                    validMoves.add(new ChessMove(myPosition, diagonalPositionL, null));
-                } else if(board.getPiece(diagonalPositionR).getTeamColor() != color){ // enemy to the right
-                    validMoves.add(new ChessMove(myPosition, diagonalPositionR, null));
-                }
-                break; // can only move once
-
-
-            }
-        }else{ // white pawn moves
-            if(row == 2){
-                CalcFunctions.checkUp(board, myPosition, color, validMoves, row, col, 2); // move 2 for first time
-            } else if(row == 7){ //promotion
-                int newRow = ++row;
-                ChessPosition newPosition = new ChessPosition(newRow, col);
-                validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.QUEEN));
-                validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.BISHOP));
-                validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.KNIGHT));
-                validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.ROOK));
-            }
-            CalcFunctions.checkUp(board, myPosition, color, validMoves, row, col, 1); // white pawns move up
-        }
-*/
         return validMoves;
     }
 }
