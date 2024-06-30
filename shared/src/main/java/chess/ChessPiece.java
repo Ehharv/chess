@@ -71,9 +71,9 @@ public class ChessPiece {
 //            case KNIGHT:
 //                calculator = new KnightCalculator();
 //                break;
-//            case PAWN:
-//                calculator = new PawnCalculator();
-//                break;
+            case PAWN:
+                calculator = new PawnCalculator();
+                break;
             default:
                 calculator = new BishopCalculator();
         }
