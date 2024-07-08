@@ -258,15 +258,15 @@ public class ChessGame {
         for(int row =  1; row <= 8; row++){
             for (int col =  1; col <= 8; col++){
                 ChessPosition position = new ChessPosition(row, col);
-                if(board.getPiece(position) != null) {
+                if(board.getPiece(position) != null && board.getPiece(position).getTeamColor() == teamColor) {
                     Collection<ChessMove> validMoves = validMoves(position); // calculate valid moves
                     if(!validMoves.isEmpty()){
-                        return true;
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
     /**
