@@ -195,7 +195,33 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if(isInCheck(teamColor)){
+            // run through all teamColor pieces and check if any of their moves make in check false
+            for(int row =  1; row <= 8; row++){
+                for (int col =  1; col <= 8; col++){
+                    ChessPosition position = new ChessPosition(row, col);
+                    ChessPiece piece = board.getPiece(position);
+                    if(piece != null && piece.getTeamColor() == teamColor) {
+                        for (ChessMove move : piece.pieceMoves(board, position)) {
+                            ChessBoard boardCopy = copyBoard();
+                            if(move.getPromotionPiece() == null){
+                                boardCopy.addPiece(move.getEndPosition(), piece);
+                            } else {
+                                boardCopy.addPiece(move.getEndPosition(), new ChessPiece(teamColor, move.getPromotionPiece()));
+                            }
+                            boardCopy.addPiece(move.getStartPosition(), null); // remove piece
+                            if(!theoreticalIsInCheck(teamColor, boardCopy)){
+                                return false; //if any one move makes the king not in check, then its not checkmate
+                            }
+                        }
+                    }
+                }
+            }
+            return true; // went through all possible moves
+
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -206,7 +232,19 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        // run through all possible moves, if none of them are possible without putting king in check -> stalemate
+        for(int row =  1; row <= 8; row++){
+            for (int col =  1; col <= 8; col++){
+                ChessPosition position = new ChessPosition(row, col);
+                if(board.getPiece(position) != null) {
+                    Collection<ChessMove> validMoves = validMoves(position); // calculate valid moves
+                    if(!validMoves.isEmpty()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
