@@ -104,19 +104,23 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-       Collection<ChessMove> validMoves = validMoves(move.getStartPosition()); // calculate valid moves
+       try{
+        Collection<ChessMove> validMoves = validMoves(move.getStartPosition()); // calculate valid moves
         ChessPiece piece = board.getPiece(move.getStartPosition());
-        System.out.println("TEST\n");
+        ChessGame.TeamColor color = board.getPiece(move.getStartPosition()).getTeamColor();
         if(validMoves.isEmpty()){ // make sure there are some valid moves
            throw new InvalidMoveException();
        } else if(!validMoves.contains(move)){ // see if our valid list has the move we're testing
            throw new InvalidMoveException();
         } else if(isInCheck(getTeamTurn())){
-            System.out.println("IN CHECK!");
             ChessBoard boardCopy = copyBoard();
             ChessPosition end = move.getEndPosition();
             ChessPosition start = move.getStartPosition();
-            boardCopy.addPiece(end, piece);
+            if(move.getPromotionPiece() == null){
+                boardCopy.addPiece(end,piece);
+            } else {
+                boardCopy.addPiece(end, new ChessPiece(color, move.getPromotionPiece()));
+            }
             boardCopy.addPiece(start, null);
             if(!theoreticalIsInCheck(getTeamTurn(), boardCopy)){
                 throw new InvalidMoveException();
@@ -124,8 +128,15 @@ public class ChessGame {
 
 
         }else {
-           board.addPiece(move.getEndPosition(), piece);
+            if(move.getPromotionPiece() == null){
+                board.addPiece(move.getEndPosition(), piece);
+            } else {
+                board.addPiece(move.getEndPosition(), new ChessPiece(color, move.getPromotionPiece()));
+            }
            board.addPiece(move.getStartPosition(), null);
+       }
+       } catch(Exception NullPointerException){
+           throw new InvalidMoveException();
        }
     }
 
