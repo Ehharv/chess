@@ -45,6 +45,7 @@ public class ChessBoard {
      */
     public void resetBoard() {
         squares = new ChessPiece[8][8];
+
         // Left to right bottom row
         this.addPiece(new ChessPosition(1,1), new ChessPiece(ChessGame.TeamColor.WHITE, ROOK));
         this.addPiece(new ChessPosition(1,2), new ChessPiece(ChessGame.TeamColor.WHITE, KNIGHT));

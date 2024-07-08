@@ -2,7 +2,9 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
+import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
 import static chess.ChessPiece.PieceType.KING;
 
@@ -18,6 +20,7 @@ public class ChessGame {
 
     public ChessGame() {
         this.board = new ChessBoard();
+        this.board.resetBoard();
         this.TeamTurn = WHITE; // white goes first
     }
 
@@ -97,6 +100,19 @@ public class ChessGame {
        return validMoves;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame = (ChessGame) o;
+        return Objects.equals(board, chessGame.board) && TeamTurn == chessGame.TeamTurn;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board, TeamTurn);
+    }
+
     /**
      * Makes a move in a chess game
      *
@@ -137,6 +153,12 @@ public class ChessGame {
        }
        } catch(Exception NullPointerException){
            throw new InvalidMoveException();
+       }
+
+       if(board.getPiece(move.getStartPosition()).getTeamColor() == BLACK){
+           setTeamTurn(WHITE);
+       } else {
+           setTeamTurn(BLACK);
        }
     }
 
