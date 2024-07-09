@@ -242,16 +242,20 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         // run through all possible moves, if none of them are possible without putting king in check -> stalemate
-        for(int row =  1; row <= 8; row++){
-            for (int col =  1; col <= 8; col++){
-                ChessPosition position = new ChessPosition(row, col);
-                if(board.getPiece(position) != null && board.getPiece(position).getTeamColor() == teamColor) {
-                    Collection<ChessMove> validMoves = validMoves(position); // calculate valid moves
-                    if(!validMoves.isEmpty()){
-                        return false;
+        if(!isInCheckmate(teamColor) && !isInCheck(teamColor)) {
+            for (int row = 1; row <= 8; row++) {
+                for (int col = 1; col <= 8; col++) {
+                    ChessPosition position = new ChessPosition(row, col);
+                    if (board.getPiece(position) != null && board.getPiece(position).getTeamColor() == teamColor) {
+                        Collection<ChessMove> validMoves = validMoves(position); // calculate valid moves
+                        if (!validMoves.isEmpty()) {
+                            return false;
+                        }
                     }
                 }
             }
+        } else {
+            return false;
         }
         return true;
     }
