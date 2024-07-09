@@ -138,6 +138,11 @@ public class ChessGame {
                 boardCopy.addPiece(end, new ChessPiece(color, move.getPromotionPiece()));
             }
             boardCopy.addPiece(start, null);
+            if(board.getPiece(move.getStartPosition()).getTeamColor() == BLACK){
+                setTeamTurn(WHITE);
+            } else {
+                setTeamTurn(BLACK);
+            }
             if(!theoreticalIsInCheck(getTeamTurn(), boardCopy)){
                 throw new InvalidMoveException();
             }
@@ -150,16 +155,16 @@ public class ChessGame {
                 board.addPiece(move.getEndPosition(), new ChessPiece(color, move.getPromotionPiece()));
             }
            board.addPiece(move.getStartPosition(), null);
+            if(board.getPiece(move.getEndPosition()).getTeamColor() == BLACK){
+                setTeamTurn(WHITE);
+            } else {
+                setTeamTurn(BLACK);
+            }
        }
        } catch(Exception NullPointerException){
            throw new InvalidMoveException();
        }
 
-       if(board.getPiece(move.getStartPosition()).getTeamColor() == BLACK){
-           setTeamTurn(WHITE);
-       } else {
-           setTeamTurn(BLACK);
-       }
     }
 
     /**

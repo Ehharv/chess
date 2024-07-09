@@ -91,43 +91,43 @@ public class ChessBoard {
     }
     @Override
     public String toString() {
-        String printMe = "Chess Board: \n";
-        System.out.println(printMe);
-            for(int row = 8; row >= 1; row--) {
-                for(int col = 1; col <= 8; col++) {
-                    try {
-                        switch (this.getPiece(new ChessPosition(row, col)).getPieceType()) {
-                            case PAWN:
-                                System.out.print("|p|");
-                                break;
-                            case KNIGHT:
-                                System.out.print("|n|");
-                                break;
-                            case BISHOP:
-                                System.out.print("|b|");
-                                break;
-                            case QUEEN:
-                                System.out.print("|q|");
-                                break;
-                            case KING:
-                                System.out.print("|k|");
-                                break;
-                            case ROOK:
-                                System.out.print("|r|");
-                                break;
-                        }
+        StringBuilder printMe = new StringBuilder("Chess Board: \n");
 
-                    } catch (Exception NullPointerException){
-                        System.out.print("|_|");
-
+        for (int row = 8; row >= 1; row--) {
+            for (int col = 1; col <= 8; col++) {
+                String square;
+                try {
+                    switch (this.getPiece(new ChessPosition(row, col)).getPieceType()) {
+                        case PAWN:
+                            square = "|p|";
+                            break;
+                        case KNIGHT:
+                            square = "|n|";
+                            break;
+                        case BISHOP:
+                            square = "|b|";
+                            break;
+                        case QUEEN:
+                            square = "|q|";
+                            break;
+                        case KING:
+                            square = "|k|";
+                            break;
+                        case ROOK:
+                            square = "|r|";
+                            break;
+                        default:
+                            square = "|_|";
                     }
-                    if (col == 8) {
-                        System.out.println("\n");
-                    }
+                } catch (NullPointerException e) {
+                    square = "|_|";
                 }
+                printMe.append(square);
             }
+            printMe.append("\n");
+        }
 
-        return printMe;
+        return printMe.toString();
     }
 
     @Override
