@@ -1,6 +1,6 @@
 package dataaccess;
 
-import model.User;
+import model.UserData;
 
 public interface UserDao {
     /**
@@ -13,7 +13,7 @@ public interface UserDao {
      *
      * @param user the user to create
      */
-    void createUser(User user);
+    void createUser(UserData user);
 
     /**
      * retrives a user with the give username
@@ -21,7 +21,7 @@ public interface UserDao {
      * @param username the username of the user to retrive
      * @return the matching user
      */
-    User getUser(String username);
+    UserData getUser(String username);
 
 
     /**

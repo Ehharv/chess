@@ -1,16 +1,17 @@
 package dataaccess;
 
-import model.User;
+import model.UserData;
 
 public class MemoryUserDao implements UserDao {
     public void clear(){
 
     }
 
-    public void createUser(User user){
+    public void createUser(UserData user){
 
     }
-    public User getUser(String username){
+
+    public UserData getUser(String username){
         return null;
     }
 
