@@ -1,11 +1,11 @@
 package server;
 
 import dataaccess.*;
-import service.RegisterHandler;
+import server.handler.ClearHandler;
+import server.handler.RegisterHandler;
 import service.UserService;
 import spark.*;
 import service.ClearService;
-import service.ClearHandler;
 
 public class Server {
 
