@@ -1,4 +1,4 @@
-package service.handler;
+package service;
 
 import service.ClearService;
 import spark.Request;
@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 
 public class ClearHandler implements Route {
     private final ClearService clearService;
-    private static final Gson gson = new Gson();
 
     public ClearHandler(ClearService clearService) {
         this.clearService = clearService;

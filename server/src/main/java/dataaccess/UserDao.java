@@ -13,7 +13,7 @@ public interface UserDao {
      *
      * @param user the user to create
      */
-    void createUser(UserData user);
+    void add(UserData user) throws DataAccessException;
 
     /**
      * retrives a user with the give username

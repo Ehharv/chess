@@ -3,7 +3,7 @@ package server;
 import dataaccess.*;
 import spark.*;
 import service.ClearService;
-import service.handler.ClearHandler;
+import service.ClearHandler;
 
 public class Server {
 

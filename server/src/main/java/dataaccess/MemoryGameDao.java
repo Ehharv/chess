@@ -10,4 +10,23 @@ public class MemoryGameDao implements GameDao {
     public void clear(){
         games.clear();
     }
+
+    public void add(GameData game){
+        int id = 0;
+
+        // find the next available ID
+        while(games.get(id) != null){
+            id ++;
+        }
+
+        // create an id and put it in the hashset
+        GameData newGame = new GameData(id, game.whiteUsername(), game.blackUsername(), game.gameName(), game.game());
+        games.put(id, newGame);
+    }
+
+    public GameData getGame(int id) throws DataAccessException{
+        return games.get(id);
+    }
+
+
 }

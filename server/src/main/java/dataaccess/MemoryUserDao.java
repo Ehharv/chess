@@ -11,12 +11,19 @@ public class MemoryUserDao implements UserDao {
         users.clear();
     }
 
-    public void createUser(UserData user){
+    public void add(UserData user) throws DataAccessException {
+        UserData newUser = new UserData(user.username(), user.password(), user.email());
+        if(getUser(newUser.username()) == null){
+            users.put(newUser.username(), newUser);
+        } else{
+            throw new DataAccessException("already taken");
+        }
+
 
     }
 
     public UserData getUser(String username){
-        return null;
+        return users.get(username);
     }
 
     public boolean verifyUser(String username, String password){
