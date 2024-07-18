@@ -30,8 +30,8 @@ public class MemoryUserDao implements UserDao {
         return false;
     }
 
-    public boolean doesUsernameExist(String username){
-        return false;
+    public boolean isUsernameAvailable(String username){
+        return !users.containsKey(username);
     }
 
 

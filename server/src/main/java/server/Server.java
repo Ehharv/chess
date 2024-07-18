@@ -1,6 +1,8 @@
 package server;
 
 import dataaccess.*;
+import service.RegisterHandler;
+import service.UserService;
 import spark.*;
 import service.ClearService;
 import service.ClearHandler;
@@ -18,9 +20,11 @@ public class Server {
         GameDao gameDao = new MemoryGameDao();
 
         ClearService clearService = new ClearService(userDao, authDao, gameDao);
+        UserService userService = new UserService(userDao, authDao);
 
         // Register your endpoints and handle exceptions here.
         Spark.delete("/db", new ClearHandler(clearService));
+        Spark.post("/user", new RegisterHandler(userService));
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
