@@ -11,8 +11,12 @@ public class MemoryAuthDao implements AuthDao{
         auth.clear();
     }
 
-    public AuthData getAuth(String username){
+    public AuthData getAuthByUsername(String username){
         return auth.get(username);
+    }
+
+    public AuthData getAuthByToken(String token){
+        return auth.get(token);
     }
 
     public void add(AuthData authData) throws DataAccessException{

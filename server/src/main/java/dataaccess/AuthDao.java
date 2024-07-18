@@ -6,12 +6,20 @@ public interface AuthDao {
     void clear();
 
     /**
-     * retrives a user's authToken with the give username
+     * retrives a user's authdata with the given username
      *
-     * @param username the username of the authtoken to retrieve
-     * @return the token
+     * @param username of the data to retrieve
+     * @return the authdata
      */
-     AuthData getAuth(String username);
+     AuthData getAuthByUsername(String username);
+
+    /**
+     * retrives a user's authdata with the given token
+     *
+     * @param token of the data to retrieve
+     * @return the authdata
+     */
+    AuthData getAuthByToken(String token);
 
     /**
      * Adds an authtoken

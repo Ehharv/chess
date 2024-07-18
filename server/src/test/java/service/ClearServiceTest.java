@@ -11,12 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClearServiceTest {
     private UserDao userDao;
-    private GameDao gameDao;
     private AuthDao authDao;
+    private GameDao gameDao;
+
 
     @Test
     void testClearService() throws DataAccessException {
-        // int daos
+        // init daos
         userDao = new MemoryUserDao();
         authDao = new MemoryAuthDao();
         gameDao = new MemoryGameDao();
@@ -37,7 +38,7 @@ class ClearServiceTest {
 
         // check if the data still exists
         assertNull(userDao.getUser(user.username()));
-        assertNull(authDao.getAuth(user.username()));
+        assertNull(authDao.getAuthByUsername(user.username()));
         assertNull(gameDao.getGame(game.gameID()));
 
     }
