@@ -4,6 +4,8 @@ import dataaccess.*;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.*;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +26,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidRegistration() throws DataAccessException {
+    void testValidRegistration() throws DataAccessException, BadRequestException, AlreadyTakenException {
 
         UserData user = new UserData("username", "password", "email@email.com");
         AuthData registeredUser = new UserService(userDao, authDao).register(user);
@@ -39,10 +41,10 @@ class UserServiceTest {
     }
 
     @Test
-    void testInvalidRegistration() throws DataAccessException {
+    void testInvalidRegistration() throws DataAccessException, BadRequestException, AlreadyTakenException {
         UserData user = new UserData("username", "password", "email@email.com");
         new UserService(userDao, authDao).register(user);
 
-        assertThrows(DataAccessException.class, () -> new UserService(userDao, authDao).register(user));
+        assertThrows(AlreadyTakenException.class, () -> new UserService(userDao, authDao).register(user));
     }
 }

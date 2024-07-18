@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -26,6 +28,12 @@ public class RegisterHandler implements Route {
             res.type("application/json");
             res.status(200);
             return gson.toJson(authToken);
+        } catch(BadRequestException e){
+            res.status(400);
+            return gson.toJson(e.getMessage());
+        } catch(AlreadyTakenException e){
+            res.status(403);
+            return gson.toJson(e.getMessage());
         } catch (Exception e) {
             res.status(500);
             return gson.toJson("Something went wrong");
