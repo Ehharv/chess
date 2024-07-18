@@ -17,16 +17,20 @@ public class UserService {
 
     public AuthData register(UserData user) throws DataAccessException {
         AuthData authData;
-        if (userDao.isUsernameAvailable(user.username())) {
-            userDao.add(user);
+        if(user != null && user.username() != null && user.password() != null) {
+            if (userDao.isUsernameAvailable(user.username())) {
+                userDao.add(user);
 
-            authData = AuthData.generateAuthToken(user.username());
-            authDao.add(authData);
+                authData = AuthData.generateAuthToken(user.username());
+                authDao.add(authData);
 
-            return authData;
+                return authData;
 
+            } else {
+                throw new DataAccessException("Username is not available");
+            }
         } else {
-            throw new RuntimeException("Username is not available");
+            throw new DataAccessException("Username is null");
         }
     }
 }

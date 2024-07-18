@@ -26,7 +26,6 @@ class UserServiceTest {
     @Test
     void testValidRegistration() throws DataAccessException {
 
-
         UserData user = new UserData("username", "password", "email@email.com");
         AuthData registeredUser = new UserService(userDao, authDao).register(user);
 
@@ -37,5 +36,13 @@ class UserServiceTest {
         // Check if it got put into the database
         assertFalse(userDao.isUsernameAvailable(user.username()));
         assertEquals(authDao.getAuthByToken(registeredUser.authToken()).username(), user.username());
+    }
+
+    @Test
+    void testInvalidRegistration() throws DataAccessException {
+        UserData user = new UserData("username", "password", "email@email.com");
+        new UserService(userDao, authDao).register(user);
+
+        assertThrows(DataAccessException.class, () -> new UserService(userDao, authDao).register(user));
     }
 }
