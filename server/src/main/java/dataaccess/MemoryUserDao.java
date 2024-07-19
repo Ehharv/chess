@@ -3,6 +3,7 @@ package dataaccess;
 import model.UserData;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MemoryUserDao implements UserDao {
     final private HashMap<String, UserData> users = new HashMap<>(); // key is username
@@ -26,8 +27,9 @@ public class MemoryUserDao implements UserDao {
         return users.get(username);
     }
 
-    public boolean verifyUser(String username, String password){
-        return false;
+    public boolean isValidLogin(String username, String password){
+        UserData user =  getUser(username);
+        return Objects.equals(user.password(), password);
     }
 
     public boolean isUsernameAvailable(String username){

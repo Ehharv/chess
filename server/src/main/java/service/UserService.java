@@ -7,6 +7,7 @@ import model.AuthData;
 import model.UserData;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
+import service.exceptions.UnauthorizedException;
 
 public class UserService {
     private UserDao userDao;
@@ -33,6 +34,22 @@ public class UserService {
             }
         } else {
             throw new BadRequestException("Error: Bad Request");
+        }
+    }
+
+    public AuthData login(String username, String password) throws UnauthorizedException, DataAccessException {
+        AuthData authData;
+        if (username != null && password != null) {
+            if (userDao.isValidLogin(username, password)) {
+                authData = AuthData.generateAuthToken(username);
+                authDao.add(authData);
+
+                return authData;
+            } else{
+                throw new UnauthorizedException("Error: Unauthorized");
+            }
+        } else{
+            throw new UnauthorizedException("Error: Unauthorized");
         }
     }
 }
