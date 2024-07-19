@@ -28,5 +28,10 @@ public interface AuthDao {
      */
     void add(AuthData authData) throws DataAccessException;
 
-
+    /**
+     * Removes an authtoken when loggin out
+     *
+     * @param authToken the auth token to find and remove
+     */
+    void remove(String authToken) throws DataAccessException;
 }

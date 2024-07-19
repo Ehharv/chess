@@ -1,39 +1,44 @@
 package server.handler;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import dataaccess.DataAccessException;
 import model.AuthData;
+import model.UserData;
 import service.UserService;
+import service.exceptions.AlreadyTakenException;
+import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class LoginHandler implements Route {
+public class LogoutHandler implements Route {
     private final UserService userService;
 
-    public LoginHandler(UserService userService) {
+    public LogoutHandler(UserService userService) {
+
         this.userService = userService;
     }
 
     @Override
     public Object handle(Request req, Response res) throws DataAccessException {
-        // get the username and password from json
         Gson gson = new Gson();
-        JsonObject jsonObject = JsonParser.parseString(req.body()).getAsJsonObject();
-        String username = jsonObject.get("username").getAsString();
-        String password = jsonObject.get("password").getAsString();
+
+        String authToken = req.headers("Authorization");
+
         try {
-            AuthData authToken = userService.login(username, password);
+            if (authToken == null || authToken.isEmpty()) {
+                throw new UnauthorizedException("Error: unauthorized");
+            }
+
+            userService.logout(authToken);
 
             res.type("application/json");
             res.status(200);
-            return gson.toJson(authToken);
-        } catch(UnauthorizedException e){
+            return gson.toJson("");
+        } catch(UnauthorizedException e ) {
             res.status(401);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(e);
         } catch (Exception e) {
             res.status(500);
             return gson.toJson("Something went wrong");

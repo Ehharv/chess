@@ -52,4 +52,13 @@ public class UserService {
             throw new UnauthorizedException("Error: Unauthorized");
         }
     }
+
+    public void logout(String authToken) throws UnauthorizedException, DataAccessException {
+        // make sure this token exists then remove it
+        if(authDao.getAuthByToken(authToken) != null){
+            authDao.remove(authToken);
+        } else {
+            throw new UnauthorizedException("Error: Unauthorized");
+        }
+    }
 }
