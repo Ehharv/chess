@@ -24,7 +24,7 @@ public class LogoutHandler implements Route {
     public Object handle(Request req, Response res) throws DataAccessException {
         Gson gson = new Gson();
 
-        String authToken = req.headers("Authorization");
+        String authToken = req.headers("authorization");
 
         try {
             if (authToken == null || authToken.isEmpty()) {

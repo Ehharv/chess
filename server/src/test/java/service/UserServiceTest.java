@@ -67,4 +67,20 @@ class UserServiceTest {
         // login a user without registering
          assertThrows(UnauthorizedException.class, () -> new UserService(userDao, authDao).login(user.username(), user.password()));
     }
+
+    @Test
+    void testValidLogout() throws BadRequestException, DataAccessException, AlreadyTakenException, UnauthorizedException {
+        UserData user = new UserData("username", "password", "email@email.com");
+        AuthData authData = new UserService(userDao, authDao).register(user);
+
+        new UserService(userDao, authDao).logout(authData.authToken());
+
+        assertNull(authDao.getAuthByToken(authData.authToken()));
+
+    }
+
+    @Test
+    void testInvalidLogout() throws BadRequestException, DataAccessException, AlreadyTakenException, UnauthorizedException {
+        assertThrows(UnauthorizedException.class, () -> new UserService(userDao, authDao).logout("authToken"));
+    }
 }
