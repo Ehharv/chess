@@ -6,6 +6,7 @@ import model.UserData;
 import org.junit.jupiter.api.*;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
+import service.exceptions.UnauthorizedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,5 +47,16 @@ class UserServiceTest {
         new UserService(userDao, authDao).register(user);
 
         assertThrows(AlreadyTakenException.class, () -> new UserService(userDao, authDao).register(user));
+    }
+
+    @Test
+    void testValidLogin() throws DataAccessException, UnauthorizedException, BadRequestException, AlreadyTakenException {
+        UserData user = new UserData("username", "password", "email@email.com");
+        new UserService(userDao, authDao).register(user);
+
+        AuthData authData = new UserService(userDao, authDao).login(user.username(), user.password());
+
+        assertNotNull(authData.authToken());
+        assertEquals(authData.username(), user.username());
     }
 }

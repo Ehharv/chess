@@ -29,6 +29,9 @@ public class MemoryUserDao implements UserDao {
 
     public boolean isValidLogin(String username, String password){
         UserData user =  getUser(username);
+        if (user == null) {
+            return false;
+        }
         return Objects.equals(user.password(), password);
     }
 

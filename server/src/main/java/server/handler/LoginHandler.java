@@ -39,7 +39,7 @@ public class LoginHandler implements Route {
             return gson.toJson(e.getMessage());
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson("Something went wrong"); // TODO: find out why it keeps throwing 500's instead of 401's
+            return gson.toJson("Something went wrong");
         }
     }
 }
