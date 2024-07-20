@@ -2,7 +2,9 @@ package dataaccess;
 
 import model.GameData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MemoryGameDao implements GameDao {
     final private HashMap<Integer, GameData> games = new HashMap<>();
@@ -26,6 +28,12 @@ public class MemoryGameDao implements GameDao {
 
     public GameData getGame(int id) throws DataAccessException{
         return games.get(id);
+    }
+
+    public List<GameData> getAllGames() throws DataAccessException{
+        List<GameData> allGames = new ArrayList<>();
+        allGames.addAll(games.values());
+        return allGames;
     }
 
 

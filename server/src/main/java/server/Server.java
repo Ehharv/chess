@@ -1,10 +1,9 @@
 package server;
 
+import com.google.gson.Gson;
 import dataaccess.*;
-import server.handler.ClearHandler;
-import server.handler.LoginHandler;
-import server.handler.LogoutHandler;
-import server.handler.RegisterHandler;
+import server.handler.*;
+import service.GameService;
 import service.UserService;
 import spark.*;
 import service.ClearService;
@@ -23,13 +22,15 @@ public class Server {
 
         ClearService clearService = new ClearService(userDao, authDao, gameDao);
         UserService userService = new UserService(userDao, authDao);
+        GameService gameService = new GameService(userDao, authDao, gameDao);
 
+        Gson gson = new Gson();
         // filter for logout
         Spark.before("/session", (request, response) -> {
             if (request.requestMethod().equals("DELETE")) {
                 String authToken = request.headers("authorization");
-                if (isAuthorized(authToken, authDao)) {
-                    Spark.halt(401,  "{\"message\":\"Error: unauthorized\"}");
+                if (isUnauthorized(authToken, authDao)) {
+                    Spark.halt(401,  gson.toJson("Error: Unauthorized"));
                 }
             }
         });
@@ -37,8 +38,8 @@ public class Server {
         // filter for game stuff
         Spark.before("/game", (request, response) -> {
             String authToken = request.headers("authorization");
-            if (isAuthorized(authToken, authDao)) {
-                Spark.halt(401,  "{\"message\":\"Error: unauthorized\"}");
+            if (isUnauthorized(authToken, authDao)) {
+                Spark.halt(401,  gson.toJson("Error: Unauthorized"));
             }
         });
 
@@ -47,6 +48,7 @@ public class Server {
         Spark.post("/user", new RegisterHandler(userService));
         Spark.post("/session", new LoginHandler(userService));
         Spark.delete("/session", new LogoutHandler(userService));
+        Spark.get("/game", new ListGamesHandler(gameService));
 
         //This line initializes the server and can be removed once you have a functioning endpoint
         Spark.init();
@@ -55,7 +57,7 @@ public class Server {
         return Spark.port();
     }
 
-    private static boolean isAuthorized(String authToken, AuthDao authDao) {
+    private static boolean isUnauthorized(String authToken, AuthDao authDao) {
         return authToken == null || authToken.isEmpty() || authDao.getAuthByToken(authToken) == null;
     }
 

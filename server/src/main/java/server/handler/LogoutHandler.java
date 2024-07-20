@@ -41,7 +41,7 @@ public class LogoutHandler implements Route {
             return gson.toJson(e);
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson("Something went wrong");
+            return gson.toJson(e);
         }
     }
 }
