@@ -1,4 +1,4 @@
-package server.handler;
+package server.handler.testing;
 
 import service.ClearService;
 import spark.Request;

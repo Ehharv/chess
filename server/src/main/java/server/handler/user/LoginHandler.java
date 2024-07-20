@@ -1,4 +1,4 @@
-package server.handler;
+package server.handler.user;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -36,7 +36,7 @@ public class LoginHandler implements Route {
             return gson.toJson(e.getMessage());
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson("Something went wrong");
+            return gson.toJson(e.getMessage());
         }
     }
 }

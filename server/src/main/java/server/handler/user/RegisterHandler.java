@@ -1,4 +1,4 @@
-package server.handler;
+package server.handler.user;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;

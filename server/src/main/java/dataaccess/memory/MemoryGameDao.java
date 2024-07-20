@@ -1,5 +1,8 @@
-package dataaccess;
+package dataaccess.memory;
 
+import chess.ChessGame;
+import dataaccess.DataAccessException;
+import dataaccess.GameDao;
 import model.GameData;
 
 import java.util.ArrayList;
@@ -14,19 +17,13 @@ public class MemoryGameDao implements GameDao {
     }
 
     public void add(GameData game){
-        int id = 0;
-
-        // find the next available ID
-        while(games.get(id) != null){
-            id ++;
-        }
-
+        int id = getNextAvailableId();
         // create an id and put it in the hashset
         GameData newGame = new GameData(id, game.whiteUsername(), game.blackUsername(), game.gameName(), game.game());
         games.put(id, newGame);
     }
 
-    public GameData getGame(int id) throws DataAccessException{
+    public GameData getGame(int id) throws DataAccessException {
         return games.get(id);
     }
 
@@ -34,6 +31,23 @@ public class MemoryGameDao implements GameDao {
         List<GameData> allGames = new ArrayList<>();
         allGames.addAll(games.values());
         return allGames;
+    }
+
+    public int createGame(String gameName) throws DataAccessException{
+        int id = getNextAvailableId();
+        // create an id and put it in the hashset
+        GameData newGame = new GameData(id, null, null, gameName, new ChessGame());
+        games.put(id, newGame);
+        return id;
+    }
+
+
+    private int getNextAvailableId() {
+        int id = 0;
+        while (games.get(id) != null) {
+            id++;
+        }
+        return id;
     }
 
 

@@ -29,4 +29,13 @@ public interface GameDao {
      *
      */
     List<GameData> getAllGames() throws DataAccessException;
+
+    /**
+     * makes a new game and returns the id
+     *
+     * @param gameName name of the game to create
+     */
+    int createGame(String gameName) throws DataAccessException;
+
 }
+

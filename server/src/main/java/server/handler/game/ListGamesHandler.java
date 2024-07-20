@@ -1,4 +1,4 @@
-package server.handler;
+package server.handler.game;
 
 import com.google.gson.Gson;
 import model.GameData;
@@ -36,10 +36,10 @@ public class ListGamesHandler implements Route {
 
         } catch (UnauthorizedException e) {
                 res.status(401);
-                return gson.toJson(e);
+                return gson.toJson(e.getMessage());
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson(e);
+            return gson.toJson(e.getMessage());
         }
     }
 }

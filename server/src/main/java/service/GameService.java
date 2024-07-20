@@ -5,6 +5,7 @@ import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import dataaccess.UserDao;
 import model.GameData;
+import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
 import java.util.ArrayList;
@@ -23,9 +24,20 @@ public class GameService {
     }
 
     public List<GameData> listGames(String authToken) throws DataAccessException, UnauthorizedException {
-        List<GameData> allGames = new ArrayList<>();
         if(authDao.getAuthByToken(authToken) !=  null){
-            return allGames = gameDao.getAllGames();
+            return gameDao.getAllGames();
+        } else {
+            throw new UnauthorizedException("Error: Unauthorized");
+        }
+    }
+
+    public int addGame(String authToken, String gameName) throws DataAccessException, UnauthorizedException, BadRequestException {
+        if(authDao.getAuthByToken(authToken) !=  null) {
+            if(gameName != null) {
+                return gameDao.createGame(gameName);
+            } else{
+                throw new BadRequestException("Error: Invalid game name");
+            }
         } else {
             throw new UnauthorizedException("Error: Unauthorized");
         }

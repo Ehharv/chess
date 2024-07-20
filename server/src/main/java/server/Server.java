@@ -2,7 +2,15 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.*;
-import server.handler.*;
+import dataaccess.memory.MemoryAuthDao;
+import dataaccess.memory.MemoryGameDao;
+import dataaccess.memory.MemoryUserDao;
+import server.handler.game.CreateGameHandler;
+import server.handler.game.ListGamesHandler;
+import server.handler.testing.ClearHandler;
+import server.handler.user.LoginHandler;
+import server.handler.user.LogoutHandler;
+import server.handler.user.RegisterHandler;
 import service.GameService;
 import service.UserService;
 import spark.*;
@@ -49,6 +57,7 @@ public class Server {
         Spark.post("/session", new LoginHandler(userService));
         Spark.delete("/session", new LogoutHandler(userService));
         Spark.get("/game", new ListGamesHandler(gameService));
+        Spark.post("/game", new CreateGameHandler(gameService));
 
         //This line initializes the server and can be removed once you have a functioning endpoint
         Spark.init();

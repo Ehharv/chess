@@ -1,12 +1,8 @@
-package server.handler;
+package server.handler.user;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
-import model.AuthData;
-import model.UserData;
 import service.UserService;
-import service.exceptions.AlreadyTakenException;
-import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
