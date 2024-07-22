@@ -31,7 +31,7 @@ public class Server {
 
         ClearService clearService = new ClearService(userDao, authDao, gameDao);
         UserService userService = new UserService(userDao, authDao);
-        GameService gameService = new GameService(userDao, authDao, gameDao);
+        GameService gameService = new GameService(authDao, gameDao);
 
         Gson gson = new Gson();
         // filter for logout

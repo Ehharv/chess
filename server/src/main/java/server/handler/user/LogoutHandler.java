@@ -23,6 +23,7 @@ public class LogoutHandler implements Route {
         String authToken = req.headers("authorization");
 
         try {
+            // check authorization
             if (authToken == null || authToken.isEmpty()) {
                 throw new UnauthorizedException("Error: unauthorized");
             }
@@ -32,12 +33,13 @@ public class LogoutHandler implements Route {
             res.type("application/json");
             res.status(200);
             return gson.toJson("");
+
         } catch(UnauthorizedException e ) {
             res.status(401);
-            return gson.toJson(e);
+            return gson.toJson(e.getMessage());
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson(e);
+            return gson.toJson(e.getMessage());
         }
     }
 }

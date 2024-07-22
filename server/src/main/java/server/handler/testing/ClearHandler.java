@@ -1,5 +1,6 @@
 package server.handler.testing;
 
+import com.google.gson.Gson;
 import service.ClearService;
 import spark.Request;
 import spark.Response;
@@ -14,16 +15,19 @@ public class ClearHandler implements Route {
 
     @Override
     public Object handle(Request req, Response res) {
+        Gson gson = new Gson();
+
         try {
             clearService.clear();
+
             res.type("application/json");
             res.status(200);
-        } catch (Exception e) {
-            res.type("application/json");
-            res.status(500);
-        }
-        return "";
+            return gson.toJson("");
 
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson(e.getMessage());
+        }
     }
 
 }

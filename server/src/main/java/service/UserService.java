@@ -18,8 +18,18 @@ public class UserService {
         this.authDao = authDao;
     }
 
+    /**
+     * Adds a new user including username, password, and email
+     *
+     * @param user the user to add to the users database
+     * @return an authtoken associated with the username
+     * @throws DataAccessException
+     * @throws AlreadyTakenException
+     * @throws BadRequestException
+     */
     public AuthData register(UserData user) throws DataAccessException, AlreadyTakenException, BadRequestException {
         AuthData authData;
+        // must have valid input to create a user
         if(user != null && user.username() != null && user.password() != null) {
             if (userDao.isUsernameAvailable(user.username())) {
                 userDao.add(user);
@@ -37,6 +47,15 @@ public class UserService {
         }
     }
 
+    /**
+     * logs in a user if they use the proper username and password
+     *
+     * @param username
+     * @param password
+     * @return a new auth token associated with this username
+     * @throws UnauthorizedException
+     * @throws DataAccessException
+     */
     public AuthData login(String username, String password) throws UnauthorizedException, DataAccessException {
         AuthData authData;
         if (username != null && password != null) {
@@ -53,7 +72,13 @@ public class UserService {
         }
     }
 
-    //TODO: fix http response for invalid logouts
+    /**
+     * removes the authToken association with the corresponding username
+     *
+     * @param authToken the authtoken of a user
+     * @throws UnauthorizedException
+     * @throws DataAccessException
+     */
     public void logout(String authToken) throws UnauthorizedException, DataAccessException {
         // make sure this token exists then remove it
         if (authDao.getAuthByToken(authToken) != null) {

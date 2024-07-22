@@ -8,7 +8,6 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListGamesHandler implements Route {
@@ -22,14 +21,18 @@ public class ListGamesHandler implements Route {
     public Object handle(Request req, Response res) {
         Gson gson = new Gson();
 
-        String authToken = req.headers("authorization");
+        String authToken;
 
         try{
+            authToken = req.headers("authorization");
+
+            // Check authorization
             if(authToken == null || authToken.isEmpty()){
                 throw new UnauthorizedException("Error: Unauthorized");
             }
-            List<GameData> allGames = new ArrayList<>();
-            allGames = gameService.listGames(authToken);
+
+            List<GameData> allGames = gameService.listGames(authToken);
+
             res.type("application/json");
             res.status(200);
             return gson.toJson(allGames);

@@ -20,15 +20,17 @@ public class RegisterHandler implements Route {
 
     @Override
     public Object handle(Request req, Response res) throws DataAccessException {
-        // get the user data from json
         Gson gson = new Gson();
-        UserData user = gson.fromJson(req.body(), UserData.class);
+        UserData user;
         try {
+            user = gson.fromJson(req.body(), UserData.class);
+
             AuthData authToken = userService.register(user);
 
             res.type("application/json");
             res.status(200);
             return gson.toJson(authToken);
+
         } catch(BadRequestException e){
             res.status(400);
             return gson.toJson(e.getMessage());
@@ -37,7 +39,7 @@ public class RegisterHandler implements Route {
             return gson.toJson(e.getMessage());
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson("Something went wrong");
+            return gson.toJson(e.getMessage());
         }
     }
 }

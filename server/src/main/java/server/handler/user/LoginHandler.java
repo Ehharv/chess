@@ -23,14 +23,18 @@ public class LoginHandler implements Route {
         // get the username and password from json
         Gson gson = new Gson();
         JsonObject jsonObject = JsonParser.parseString(req.body()).getAsJsonObject();
-        String username = jsonObject.get("username").getAsString();
-        String password = jsonObject.get("password").getAsString();
+        String username;
+        String password;
         try {
+            username = jsonObject.get("username").getAsString();
+            password = jsonObject.get("password").getAsString();
+
             AuthData authToken = userService.login(username, password);
 
             res.type("application/json");
             res.status(200);
             return gson.toJson(authToken);
+
         } catch(UnauthorizedException e){
             res.status(401);
             return gson.toJson(e.getMessage());

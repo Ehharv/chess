@@ -1,31 +1,34 @@
 package service;
 
 import chess.ChessGame;
-import chess.ChessPiece;
 import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
 import dataaccess.GameDao;
-import dataaccess.UserDao;
 import model.GameData;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameService {
 
-    private UserDao userDao;
     private AuthDao authDao;
     private GameDao gameDao;
 
-    public GameService(UserDao userDao, AuthDao authDao, GameDao gameDao) {
-        this.userDao = userDao;
+    public GameService(AuthDao authDao, GameDao gameDao) {
         this.authDao = authDao;
         this.gameDao = gameDao;
     }
 
+    /**
+     * Gets a list of all the games includes usernames of players and status of the game (including the entire board)
+     *
+     * @param authToken makes sure user is signed in
+     * @return the list of all games in the database
+     * @throws DataAccessException
+     * @throws UnauthorizedException
+     */
     public List<GameData> listGames(String authToken) throws DataAccessException, UnauthorizedException {
         if(authDao.getAuthByToken(authToken) !=  null){
             return gameDao.getAllGames();
@@ -34,6 +37,16 @@ public class GameService {
         }
     }
 
+    /**
+     * Creates a new game with a name.
+     *
+     * @param authToken makes sure user is signed in
+     * @param gameName what you would like to name the new game, does not need to be unique
+     * @return the integer ID of the new game
+     * @throws DataAccessException
+     * @throws UnauthorizedException
+     * @throws BadRequestException
+     */
     public int addGame(String authToken, String gameName)
             throws DataAccessException, UnauthorizedException, BadRequestException {
         if(authDao.getAuthByToken(authToken) !=  null) {
@@ -47,6 +60,17 @@ public class GameService {
         }
     }
 
+    /**
+     * Find a game by its ID and join the game as black or white if available
+     *
+     * @param authToken makes sure user is signed in
+     * @param color WHITE or BLACK to join the game as
+     * @param gameId the game you want to join
+     * @throws DataAccessException
+     * @throws UnauthorizedException
+     * @throws BadRequestException
+     * @throws AlreadyTakenException
+     */
     public void joinGame(String authToken, chess.ChessGame.TeamColor color, int gameId)
             throws DataAccessException, UnauthorizedException, BadRequestException, AlreadyTakenException {
 
@@ -67,6 +91,13 @@ public class GameService {
         }
     }
 
+    /**
+     * checks if the color the user has selected to join as is available or taken by another user
+     *
+     * @param game the game to check the status of
+     * @param color the color to check if taken
+     * @return if the color is available or not
+     */
     private boolean colorAvailable(GameData game, ChessGame.TeamColor color) {
         // make sure there isn't a username assigned already
         if(color == ChessGame.TeamColor.WHITE) {

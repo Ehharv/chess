@@ -15,6 +15,9 @@ public class ClearService {
         this.gamedao = gamedao;
     }
 
+    /**
+     * clears all data from users, authtokens, and games
+     */
     public void clear() {
         userdao.clear();
         authdao.clear();

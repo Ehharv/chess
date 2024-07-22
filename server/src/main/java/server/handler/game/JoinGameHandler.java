@@ -24,26 +24,28 @@ public class JoinGameHandler implements Route {
     public Object handle(Request req, Response res) throws BadRequestException {
         Gson gson = new Gson();
 
+        // parse request
         String authToken = req.headers("authorization");
         JsonObject jsonObject = JsonParser.parseString(req.body()).getAsJsonObject();
-        Integer gameId = jsonObject.get("gameID").getAsInt();
+        Integer gameId;
         chess.ChessGame.TeamColor color;
         try{
+            gameId = jsonObject.get("gameID").getAsInt();
             color = ChessGame.TeamColor.valueOf(jsonObject.get("playerColor").getAsString());
+
             if(authToken == null || authToken.isEmpty()){
                 throw new UnauthorizedException("Error: Unauthorized");
             }
-            if(gameId == null ){
-                throw new BadRequestException("Error: Invalid game ID");
-            }
+
             gameService.joinGame(authToken, color, gameId);
+
             res.type("application/json");
             res.status(200);
             return gson.toJson("");
 
         }catch (IllegalArgumentException e) {
             res.status(400);
-            return gson.toJson("Error: Invalid color");
+            return gson.toJson("Error: Invalid input");
         } catch (UnauthorizedException e) {
             res.status(401);
             return gson.toJson(e.getMessage());
