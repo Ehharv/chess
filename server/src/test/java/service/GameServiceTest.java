@@ -25,9 +25,12 @@ class GameServiceTest {
     private UserDao userDao;
     private AuthDao authDao;
     private GameDao gameDao;
+    private String authToken;
+    private GameService gameService;
+
 
     @BeforeEach
-    public void clearBeforeTests() throws DataAccessException {
+    public void clearBeforeTests() throws DataAccessException, BadRequestException, AlreadyTakenException {
         // init daos
         userDao = new MemoryUserDao();
         authDao = new MemoryAuthDao();
@@ -35,22 +38,41 @@ class GameServiceTest {
 
         new ClearService(userDao, authDao, gameDao).clear();
 
+
+        // create a valid user
+        UserData user = new UserData("username", "password", "email@email.com");
+        authToken = new UserService(userDao, authDao).register(user).authToken();
+
+        gameService = new GameService(authDao, gameDao);
+
     }
 
     @Test
     public void testValidListGames() throws BadRequestException, DataAccessException, AlreadyTakenException, UnauthorizedException {
-        UserData user = new UserData("username", "password", "email@email.com");
-        String authToken = new UserService(userDao, authDao).register(user).authToken();
-
         // given a valid authtoken of a registered user
         List<GameData> expectedEmpty = new ArrayList<>();
-        assertEquals(expectedEmpty, new GameService(authDao, gameDao).listGames(authToken));
+        assertEquals(expectedEmpty, gameService.listGames(authToken));
     }
 
     @Test
     public void testInvalidListGames(){
         // no valid auth token provided
-        assertThrows(UnauthorizedException.class, () -> {new GameService(authDao, gameDao).listGames("invalidAuthToken");});
+        assertThrows(UnauthorizedException.class, () -> {gameService.listGames("invalidAuthToken");});
+    }
+
+    @Test
+    public void testValidAddGame() throws UnauthorizedException, BadRequestException, DataAccessException {
+        int newGameID = gameService.addGame(authToken, "valid game name");
+        int expectedGameID = 0;
+
+        assertEquals(expectedGameID, newGameID); // becomes the 0th game
+        assertEquals(1, gameService.listGames(authToken).size()); // adds to the list of games (size 1 now)
+    }
+
+    @Test
+    public void testInvalidAddGame(){
+        // no game name given
+        assertThrows(BadRequestException.class, () -> {gameService.addGame(authToken, null);});
     }
 
 }
