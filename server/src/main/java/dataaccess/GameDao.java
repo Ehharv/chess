@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.GameData;
 
 import java.util.List;
@@ -37,5 +38,13 @@ public interface GameDao {
      */
     int createGame(String gameName) throws DataAccessException;
 
+    /**
+     * adds a player to the game
+     *
+     * @param color
+     * @param username
+     * @param gameId
+     */
+    void joinGame(ChessGame.TeamColor color, String username, int gameId);
 }
 

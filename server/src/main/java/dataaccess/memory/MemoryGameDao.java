@@ -41,6 +41,21 @@ public class MemoryGameDao implements GameDao {
         return id;
     }
 
+    public void joinGame(ChessGame.TeamColor color, String username, int gameId){
+        GameData game = games.get(gameId);
+        GameData updatedGame;
+
+        //replace the previous game with updated username
+        if(color == ChessGame.TeamColor.BLACK){
+            updatedGame = new GameData(gameId, game.whiteUsername(), username, game.gameName(), game.game());
+        } else {
+            updatedGame = new GameData(gameId, username, game.blackUsername(), game.gameName(), game.game());
+        }
+
+        games.put(gameId, updatedGame); // replace the old game
+    }
+
+
 
     private int getNextAvailableId() {
         int id = 0;

@@ -6,6 +6,7 @@ import dataaccess.memory.MemoryAuthDao;
 import dataaccess.memory.MemoryGameDao;
 import dataaccess.memory.MemoryUserDao;
 import server.handler.game.CreateGameHandler;
+import server.handler.game.JoinGameHandler;
 import server.handler.game.ListGamesHandler;
 import server.handler.testing.ClearHandler;
 import server.handler.user.LoginHandler;
@@ -58,6 +59,7 @@ public class Server {
         Spark.delete("/session", new LogoutHandler(userService));
         Spark.get("/game", new ListGamesHandler(gameService));
         Spark.post("/game", new CreateGameHandler(gameService));
+        Spark.put("/game", new JoinGameHandler(gameService));
 
         //This line initializes the server and can be removed once you have a functioning endpoint
         Spark.init();
