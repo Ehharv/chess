@@ -1,5 +1,6 @@
 package service;
 
+import chess.ChessGame;
 import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
 import dataaccess.GameDao;
@@ -27,6 +28,7 @@ class GameServiceTest {
     private GameDao gameDao;
     private String authToken;
     private GameService gameService;
+    private UserData user;
 
 
     @BeforeEach
@@ -40,7 +42,7 @@ class GameServiceTest {
 
 
         // create a valid user
-        UserData user = new UserData("username", "password", "email@email.com");
+        user = new UserData("username", "password", "email@email.com");
         authToken = new UserService(userDao, authDao).register(user).authToken();
 
         gameService = new GameService(authDao, gameDao);
@@ -73,6 +75,30 @@ class GameServiceTest {
     public void testInvalidAddGame(){
         // no game name given
         assertThrows(BadRequestException.class, () -> {gameService.addGame(authToken, null);});
+    }
+
+    @Test
+    public void testValidJoinGame() throws UnauthorizedException, BadRequestException, DataAccessException, AlreadyTakenException {
+        int newGameID = gameService.addGame(authToken, "valid game name");
+        chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
+
+        gameService.joinGame(authToken, color, newGameID); // join game 0 as white with good authToken
+
+        GameData game = gameDao.getGame(newGameID);
+        assertEquals(user.username(), game.whiteUsername()); // white matched our username
+        assertNull(game.blackUsername()); // no black username assigned
+    }
+
+    @Test
+    public void testInvalidJoinGame() throws UnauthorizedException, BadRequestException, DataAccessException, AlreadyTakenException {
+        int newGameID = gameService.addGame(authToken, "valid game name");
+        chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
+
+        gameService.joinGame(authToken, color, newGameID); // join game 0 as white with good authToken
+        // try to game 0 as white again
+        assertThrows(AlreadyTakenException.class, () ->{gameService.joinGame(authToken, color, newGameID);});
+        // try to join a noexistent game 1
+        assertThrows(BadRequestException.class, () -> {gameService.joinGame(authToken, color, 1);});
     }
 
 }
