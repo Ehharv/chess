@@ -58,7 +58,7 @@ public class MemoryGameDao implements GameDao {
 
 
     private int getNextAvailableId() {
-        int id = 0;
+        int id = 1; // api tests dictate that the first must be 1 (why isn't it zero index?)
         while (games.get(id) != null) {
             id++;
         }

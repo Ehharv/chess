@@ -65,9 +65,9 @@ class GameServiceTest {
     @Test
     public void testValidAddGame() throws UnauthorizedException, BadRequestException, DataAccessException {
         int newGameID = gameService.addGame(authToken, "valid game name");
-        int expectedGameID = 0;
+        int expectedGameID = 1;
 
-        assertEquals(expectedGameID, newGameID); // becomes the 0th game
+        assertEquals(expectedGameID, newGameID); // becomes the 1st game
         assertEquals(1, gameService.listGames(authToken).size()); // adds to the list of games (size 1 now)
     }
 
@@ -82,7 +82,7 @@ class GameServiceTest {
         int newGameID = gameService.addGame(authToken, "valid game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 
-        gameService.joinGame(authToken, color, newGameID); // join game 0 as white with good authToken
+        gameService.joinGame(authToken, color, newGameID); // join game 1 as white with good authToken
 
         GameData game = gameDao.getGame(newGameID);
         assertEquals(user.username(), game.whiteUsername()); // white matched our username
@@ -94,11 +94,11 @@ class GameServiceTest {
         int newGameID = gameService.addGame(authToken, "valid game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 
-        gameService.joinGame(authToken, color, newGameID); // join game 0 as white with good authToken
-        // try to game 0 as white again
+        gameService.joinGame(authToken, color, newGameID); // join game 1 as white with good authToken
+        // try to game 1 as white again
         assertThrows(AlreadyTakenException.class, () ->{gameService.joinGame(authToken, color, newGameID);});
-        // try to join a noexistent game 1
-        assertThrows(BadRequestException.class, () -> {gameService.joinGame(authToken, color, 1);});
+        // try to join a noexistent game 2
+        assertThrows(BadRequestException.class, () -> {gameService.joinGame(authToken, color, 2);});
     }
 
 }

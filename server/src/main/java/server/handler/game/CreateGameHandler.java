@@ -3,6 +3,8 @@ package server.handler.game;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import model.GameData;
+import server.handler.testing.GameId;
 import service.GameService;
 import service.exceptions.BadRequestException;
 import service.exceptions.ErrorMessage;
@@ -10,6 +12,8 @@ import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
+import java.util.Map;
 
 public class CreateGameHandler implements Route {
     private final GameService gameService;
@@ -37,11 +41,12 @@ public class CreateGameHandler implements Route {
                 throw new BadRequestException("Error: Invalid game name");
             }
 
+
             int gameId = gameService.addGame(authToken, gameName);
 
             res.type("application/json");
             res.status(200);
-            return gson.toJson(gameId);
+            return gson.toJson(new GameId(gameId));
 
         } catch (UnauthorizedException e) {
             res.status(401);
