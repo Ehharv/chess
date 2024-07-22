@@ -3,6 +3,7 @@ package server.handler.game;
 import com.google.gson.Gson;
 import model.GameData;
 import service.GameService;
+import service.exceptions.ErrorMessage;
 import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
@@ -39,10 +40,10 @@ public class ListGamesHandler implements Route {
 
         } catch (UnauthorizedException e) {
                 res.status(401);
-                return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         }
     }
 }

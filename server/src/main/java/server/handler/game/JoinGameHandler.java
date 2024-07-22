@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import service.GameService;
 import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
+import service.exceptions.ErrorMessage;
 import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
@@ -43,21 +44,18 @@ public class JoinGameHandler implements Route {
             res.status(200);
             return gson.toJson(null);
 
-        }catch (IllegalArgumentException e) {
-            res.status(400);
-            return gson.toJson("Error: Invalid input");
         } catch (UnauthorizedException e) {
             res.status(401);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         } catch(BadRequestException e){
             res.status(400);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         } catch(AlreadyTakenException e){
             res.status(403);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         }
     }
 }

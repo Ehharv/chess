@@ -14,6 +14,7 @@ import server.handler.user.LogoutHandler;
 import server.handler.user.RegisterHandler;
 import service.GameService;
 import service.UserService;
+import service.exceptions.ErrorMessage;
 import spark.*;
 import service.ClearService;
 
@@ -39,7 +40,7 @@ public class Server {
             if (request.requestMethod().equals("DELETE")) {
                 String authToken = request.headers("authorization");
                 if (isUnauthorized(authToken, authDao)) {
-                    Spark.halt(401,  gson.toJson("Error: Unauthorized"));
+                    Spark.halt(401,  gson.toJson(new ErrorMessage("Error: Unauthorized")));
                 }
             }
         });
@@ -48,7 +49,7 @@ public class Server {
         Spark.before("/game", (request, response) -> {
             String authToken = request.headers("authorization");
             if (isUnauthorized(authToken, authDao)) {
-                Spark.halt(401,  gson.toJson("Error: Unauthorized"));
+                Spark.halt(401,  gson.toJson(new ErrorMessage("Error: Unauthorized")));
             }
         });
 

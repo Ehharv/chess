@@ -2,6 +2,7 @@ package server.handler.testing;
 
 import com.google.gson.Gson;
 import service.ClearService;
+import service.exceptions.ErrorMessage;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -26,7 +27,7 @@ public class ClearHandler implements Route {
 
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         }
     }
 

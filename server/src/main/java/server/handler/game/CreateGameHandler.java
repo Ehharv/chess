@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import service.GameService;
 import service.exceptions.BadRequestException;
+import service.exceptions.ErrorMessage;
 import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
@@ -44,13 +45,13 @@ public class CreateGameHandler implements Route {
 
         } catch (UnauthorizedException e) {
             res.status(401);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         } catch(BadRequestException e){
             res.status(400);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         }
     }
 }

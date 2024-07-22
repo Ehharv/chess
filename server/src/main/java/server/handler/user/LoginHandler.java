@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import service.UserService;
+import service.exceptions.ErrorMessage;
 import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
@@ -37,10 +38,10 @@ public class LoginHandler implements Route {
 
         } catch(UnauthorizedException e){
             res.status(401);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
             res.status(500);
-            return gson.toJson(e.getMessage());
+            return gson.toJson(new ErrorMessage(e.getMessage()));
         }
     }
 }
