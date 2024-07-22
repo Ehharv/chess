@@ -32,7 +32,7 @@ public class LogoutHandler implements Route {
 
             res.type("application/json");
             res.status(200);
-            return gson.toJson("");
+            return gson.toJson(null);
 
         } catch(UnauthorizedException e ) {
             res.status(401);

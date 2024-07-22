@@ -22,7 +22,7 @@ public class ClearHandler implements Route {
 
             res.type("application/json");
             res.status(200);
-            return gson.toJson("");
+            return gson.toJson(null);
 
         } catch (Exception e) {
             res.status(500);
