@@ -3,8 +3,7 @@ package server.handler.game;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import model.GameData;
-import server.handler.testing.GameId;
+import model.returnObjects.GameId;
 import service.GameService;
 import service.exceptions.BadRequestException;
 import service.exceptions.ErrorMessage;
@@ -12,8 +11,6 @@ import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.util.Map;
 
 public class CreateGameHandler implements Route {
     private final GameService gameService;

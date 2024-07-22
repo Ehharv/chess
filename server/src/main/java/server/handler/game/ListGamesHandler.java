@@ -2,6 +2,7 @@ package server.handler.game;
 
 import com.google.gson.Gson;
 import model.GameData;
+import model.returnObjects.GameList;
 import service.GameService;
 import service.exceptions.ErrorMessage;
 import service.exceptions.UnauthorizedException;
@@ -36,7 +37,7 @@ public class ListGamesHandler implements Route {
 
             res.type("application/json");
             res.status(200);
-            return gson.toJson(allGames);
+            return gson.toJson(new GameList(allGames));
 
         } catch (UnauthorizedException e) {
                 res.status(401);

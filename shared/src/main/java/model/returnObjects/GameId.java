@@ -1,4 +1,4 @@
-package server.handler.testing;
+package model.returnObjects;
 
 public record GameId(int gameID) {
 }

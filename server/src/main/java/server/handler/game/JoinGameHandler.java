@@ -31,8 +31,12 @@ public class JoinGameHandler implements Route {
         Integer gameId;
         chess.ChessGame.TeamColor color;
         try{
+            try{
             gameId = jsonObject.get("gameID").getAsInt();
-            color = ChessGame.TeamColor.valueOf(jsonObject.get("playerColor").getAsString());
+                color = ChessGame.TeamColor.valueOf(jsonObject.get("playerColor").getAsString());
+            } catch(Exception e) {
+                throw new BadRequestException("Error: Color options are WHITE or BLACK");
+            }
 
             if(authToken == null || authToken.isEmpty()){
                 throw new UnauthorizedException("Error: Unauthorized");
