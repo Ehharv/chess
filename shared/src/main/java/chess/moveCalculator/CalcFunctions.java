@@ -8,7 +8,11 @@ import chess.ChessPosition;
 import java.util.Collection;
 
 public class CalcFunctions {
-    public static void checkUp(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color, Collection<ChessMove> validMoves, int row, int col, int max){
+    public static void checkUp(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
+
         for(int i = row + 1; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(i, col);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -25,7 +29,11 @@ public class CalcFunctions {
         }
     }
 
-    public static void checkDown(ChessBoard board,ChessPosition myPosition,ChessGame.TeamColor color,Collection<ChessMove> validMoves,int row,int col, int max){
+    public static void checkDown(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
+
         for(int i = row - 1; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(i, col);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -42,7 +50,11 @@ public class CalcFunctions {
         }
     }
 
-    public static void checkLeft(ChessBoard board,ChessPosition myPosition,ChessGame.TeamColor color,Collection<ChessMove> validMoves,int row,int col, int max){
+    public static void checkLeft(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
+
         for(int i = col - 1; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(row, i);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -59,7 +71,11 @@ public class CalcFunctions {
         }
     }
 
-    public static void checkRight(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color, Collection<ChessMove> validMoves, int row, int col, int max){
+    public static void checkRight(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
+
         for(int i = col + 1; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(row, i);
             if(board.getPiece(newPosition) == null){ // empty space
@@ -76,7 +92,10 @@ public class CalcFunctions {
         }
     }
 
-    public static void checkLowerLeft(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color,Collection<ChessMove> validMoves, int row, int col, int max){
+    public static void checkLowerLeft(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
 
         for (int i = row -1, j = col-1; i >= 1 && j >= 1; i--, j--) { // move down and left diagnoally
             ChessPosition newPosition = new ChessPosition(i, j);
@@ -94,7 +113,10 @@ public class CalcFunctions {
         }
     }
 
-    public static void checkLowerRight(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color,Collection<ChessMove> validMoves, int row, int col, int max){
+    public static void checkLowerRight(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
 
         for (int i = row - 1, j = col + 1; i >= 1 && j <= 8; i--, j++) { // move down and right diagonally
             ChessPosition newPosition = new ChessPosition(i, j);
@@ -112,7 +134,10 @@ public class CalcFunctions {
         }
     }
 
-    public static void checkUpperRight(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color,Collection<ChessMove> validMoves, int row, int col, int max){
+    public static void checkUpperRight(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
 
         for (int i = row + 1, j = col + 1; i <= 8 && j <= 8; i++, j++) { // move up and right diagonally
             ChessPosition newPosition = new ChessPosition(i, j);
@@ -130,7 +155,10 @@ public class CalcFunctions {
         }
     }
 
-    public static void checkUpperLeft(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color,Collection<ChessMove> validMoves, int row, int col, int max){
+    public static void checkUpperLeft(ChessBoard board, ChessPosition myPosition, int max, Collection<ChessMove> validMoves){
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
 
         for (int i = row + 1, j = col - 1; i <= 8 && j >= 1; i++, j--) { // move up and left diagonally
             ChessPosition newPosition = new ChessPosition(i, j);
