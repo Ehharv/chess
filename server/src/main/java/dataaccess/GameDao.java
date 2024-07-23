@@ -29,7 +29,7 @@ public interface GameDao {
      * returns a list of all the games
      *
      */
-    List<GameData> getAllGames() throws DataAccessException;
+    GameData[] getAllGames() throws DataAccessException;
 
     /**
      * makes a new game and returns the id

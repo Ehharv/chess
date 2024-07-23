@@ -8,7 +8,6 @@ import dataaccess.UserDao;
 import dataaccess.memory.MemoryAuthDao;
 import dataaccess.memory.MemoryGameDao;
 import dataaccess.memory.MemoryUserDao;
-import model.AuthData;
 import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +16,8 @@ import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,10 +49,10 @@ class GameServiceTest {
     }
 
     @Test
-    public void testValidListGames() throws BadRequestException, DataAccessException, AlreadyTakenException, UnauthorizedException {
+    public void testValidListGames() throws DataAccessException, UnauthorizedException {
         // given a valid authtoken of a registered user
-        List<GameData> expectedEmpty = new ArrayList<>();
-        assertEquals(expectedEmpty, gameService.listGames(authToken));
+        // we haven't added any games yet
+        assertEquals(0, gameService.listGames(authToken).length);
     }
 
     @Test
@@ -68,7 +67,7 @@ class GameServiceTest {
         int expectedGameID = 1;
 
         assertEquals(expectedGameID, newGameID); // becomes the 1st game
-        assertEquals(1, gameService.listGames(authToken).size()); // adds to the list of games (size 1 now)
+        assertEquals(1, gameService.listGames(authToken).length); // adds to the list of games (size 1 now)
     }
 
     @Test

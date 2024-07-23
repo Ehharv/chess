@@ -33,7 +33,7 @@ public class ListGamesHandler implements Route {
                 throw new UnauthorizedException("Error: Unauthorized");
             }
 
-            List<GameData> allGames = gameService.listGames(authToken);
+            GameData[] allGames = gameService.listGames(authToken);
 
             res.type("application/json");
             res.status(200);

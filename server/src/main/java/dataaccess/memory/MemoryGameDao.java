@@ -6,6 +6,7 @@ import dataaccess.GameDao;
 import model.GameData;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,9 +28,10 @@ public class MemoryGameDao implements GameDao {
         return games.get(id);
     }
 
-    public List<GameData> getAllGames() throws DataAccessException{
-        List<GameData> allGames = new ArrayList<>();
-        allGames.addAll(games.values());
+    public GameData[] getAllGames() throws DataAccessException{
+        Collection<GameData> gameCollection = games.values();
+        GameData[] allGames = new GameData[0];
+        allGames = gameCollection.toArray(allGames);
         return allGames;
     }
 

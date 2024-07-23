@@ -29,7 +29,7 @@ public class GameService {
      * @throws DataAccessException
      * @throws UnauthorizedException
      */
-    public List<GameData> listGames(String authToken) throws DataAccessException, UnauthorizedException {
+    public GameData[] listGames(String authToken) throws DataAccessException, UnauthorizedException {
         if(authDao.getAuthByToken(authToken) !=  null){
             return gameDao.getAllGames();
         } else {
