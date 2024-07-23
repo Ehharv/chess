@@ -168,16 +168,23 @@ public class ChessGame {
                 ChessPosition position = new ChessPosition(row, col); // current square
                 ChessPiece piece = board.getPiece(position); // what piece is at the square
                 if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
-                    for (ChessMove move : piece.pieceMoves(board, position)) { // iterate through all the possible moves
-                        if (move.getEndPosition().equals(kingPosition)) { // check if the end position will be where the king is
-                            return true;
-                        }
+                    if (canCaptureKing(piece.pieceMoves(board, position), kingPosition)) {
+                        return true;
                     }
                 }
 
             }
         }
         return false; // no pieces can capture the king in their current location
+    }
+
+    private boolean canCaptureKing(Collection<ChessMove> piece, ChessPosition kingPosition) {
+        for (ChessMove move : piece) { // iterate through all the possible moves
+            if (move.getEndPosition().equals(kingPosition)) { // check if the end position will be where the king is
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean theoreticalIsInCheck(TeamColor teamColor, ChessBoard localBoard) {
@@ -189,10 +196,8 @@ public class ChessGame {
                 ChessPiece piece = localBoard.getPiece(position); // what piece is at the square
                 if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
                     Collection<ChessMove> allMoves = piece.pieceMoves(localBoard, position);
-                    for (ChessMove move : allMoves) { // iterate through all the possible moves
-                        if (move.getEndPosition().equals(kingPosition)) { // check if the end position will be where the king is
-                            return true;
-                        }
+                    if (canCaptureKing(allMoves, kingPosition)) {
+                        return true;
                     }
                 }
 
@@ -215,17 +220,9 @@ public class ChessGame {
                     ChessPosition position = new ChessPosition(row, col);
                     ChessPiece piece = board.getPiece(position);
                     if(piece != null && piece.getTeamColor() == teamColor) {
-                        for (ChessMove move : piece.pieceMoves(board, position)) {
-                            ChessBoard boardCopy = copyBoard();
-                            if(move.getPromotionPiece() == null){
-                                boardCopy.addPiece(move.getEndPosition(), piece);
-                            } else {
-                                boardCopy.addPiece(move.getEndPosition(), new ChessPiece(teamColor, move.getPromotionPiece()));
-                            }
-                            boardCopy.addPiece(move.getStartPosition(), null); // remove piece
-                            if(!theoreticalIsInCheck(teamColor, boardCopy)){
-                                return false; //if any one move makes the king not in check, then it is not checkmate
-                            }
+                        if (canMoveOutOfCheck(teamColor, piece, position)){
+                            return false; //if any one move makes the king not in check, then it is not checkmate
+
                         }
                     }
                 }
@@ -235,6 +232,22 @@ public class ChessGame {
         } else {
             return false;
         }
+    }
+
+    private boolean canMoveOutOfCheck(TeamColor teamColor, ChessPiece piece, ChessPosition position) {
+        for (ChessMove move : piece.pieceMoves(board, position)) {
+            ChessBoard boardCopy = copyBoard();
+            if(move.getPromotionPiece() == null){
+                boardCopy.addPiece(move.getEndPosition(), piece);
+            } else {
+                boardCopy.addPiece(move.getEndPosition(), new ChessPiece(teamColor, move.getPromotionPiece()));
+            }
+            boardCopy.addPiece(move.getStartPosition(), null); // remove piece
+            if(!theoreticalIsInCheck(teamColor, boardCopy)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -47,7 +47,8 @@ public class PawnCalculator implements MoveCalculator{
         return validMoves;
     }
 
-    private static void addPromoOrRegMove(ChessPosition myPosition, int newRow, int promotionRow, Collection<ChessMove> validMoves, ChessPosition newPosition) {
+    private static void addPromoOrRegMove(ChessPosition myPosition, int newRow, int promotionRow,
+                                          Collection<ChessMove> validMoves, ChessPosition newPosition) {
         if(newRow == promotionRow){
             addPromotedMove(myPosition, validMoves, newPosition);
         } else{
@@ -55,7 +56,9 @@ public class PawnCalculator implements MoveCalculator{
         }
     }
 
-    private static void addCaptureMove(ChessBoard board, ChessPosition myPosition, ChessPosition diagonalPosition, ChessGame.TeamColor color, int newRow, int promotionRow, Collection<ChessMove> validMoves) {
+    private static void addCaptureMove(ChessBoard board, ChessPosition myPosition, ChessPosition diagonalPosition,
+                                       ChessGame.TeamColor color, int newRow, int promotionRow,
+                                       Collection<ChessMove> validMoves) {
         if((board.getPiece(diagonalPosition) != null) && // piece in diagonal spot
                 (board.getPiece(diagonalPosition).getTeamColor() != color)){ // enemy in diagonal
             addPromoOrRegMove(myPosition, newRow, promotionRow, validMoves, diagonalPosition);
@@ -63,7 +66,8 @@ public class PawnCalculator implements MoveCalculator{
         }
     }
 
-    private static void addFirstMove(ChessBoard board, ChessPosition myPosition, int row, int startRow, int forward, int col, Collection<ChessMove> validMoves) {
+    private static void addFirstMove(ChessBoard board, ChessPosition myPosition, int row, int startRow,
+                                     int forward, int col, Collection<ChessMove> validMoves) {
         // first move can only go two if the first space is also empty
         if(row == startRow){
             int doubleRow = row + 2* forward;
@@ -74,7 +78,8 @@ public class PawnCalculator implements MoveCalculator{
         }
     }
 
-    private static void addPromotedMove(ChessPosition myPosition, Collection<ChessMove> validMoves, ChessPosition newPosition) {
+    private static void addPromotedMove(ChessPosition myPosition, Collection<ChessMove> validMoves,
+                                        ChessPosition newPosition) {
         validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.QUEEN));
         validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.BISHOP));
         validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.KNIGHT));
