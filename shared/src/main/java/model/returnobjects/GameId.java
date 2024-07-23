@@ -1,4 +1,4 @@
-package model.returnObjects;
+package model.returnobjects;
 
 public record GameId(int gameID) {
 }

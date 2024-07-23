@@ -1,4 +1,4 @@
-package chess.moveCalculator;
+package chess.movecalculator;
 
 import chess.ChessBoard;
 import chess.ChessGame;
@@ -7,7 +7,6 @@ import chess.ChessPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class KnightCalculator implements MoveCalculator {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {

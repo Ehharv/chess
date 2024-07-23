@@ -1,8 +1,6 @@
-package model.returnObjects;
+package model.returnobjects;
 
 import model.GameData;
-
-import java.util.List;
 
 public record GameList(GameData[] games) {
 }

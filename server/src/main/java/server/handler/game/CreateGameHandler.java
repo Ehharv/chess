@@ -3,7 +3,7 @@ package server.handler.game;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import model.returnObjects.GameId;
+import model.returnobjects.GameId;
 import service.GameService;
 import service.exceptions.BadRequestException;
 import service.exceptions.ErrorMessage;

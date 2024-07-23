@@ -2,15 +2,13 @@ package server.handler.game;
 
 import com.google.gson.Gson;
 import model.GameData;
-import model.returnObjects.GameList;
+import model.returnobjects.GameList;
 import service.GameService;
 import service.exceptions.ErrorMessage;
 import service.exceptions.UnauthorizedException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.util.List;
 
 public class ListGamesHandler implements Route {
     private final GameService gameService;
