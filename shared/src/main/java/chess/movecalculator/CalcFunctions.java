@@ -71,7 +71,7 @@ public class CalcFunctions {
     }
 
     /**
-     * Function to check horizonal negative moves
+     * Function to check horizontal negative moves
      *
      * @param board
      * @param myPosition

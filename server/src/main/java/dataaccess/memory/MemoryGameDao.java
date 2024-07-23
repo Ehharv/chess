@@ -1,14 +1,11 @@
 package dataaccess.memory;
 
 import chess.ChessGame;
-import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import model.GameData;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public class MemoryGameDao implements GameDao {
     final private HashMap<Integer, GameData> games = new HashMap<>();
@@ -24,18 +21,18 @@ public class MemoryGameDao implements GameDao {
         games.put(id, newGame);
     }
 
-    public GameData getGame(int id) throws DataAccessException {
+    public GameData getGame(int id) {
         return games.get(id);
     }
 
-    public GameData[] getAllGames() throws DataAccessException{
+    public GameData[] getAllGames() {
         Collection<GameData> gameCollection = games.values();
         GameData[] allGames = new GameData[0];
         allGames = gameCollection.toArray(allGames);
         return allGames;
     }
 
-    public int createGame(String gameName) throws DataAccessException{
+    public int createGame(String gameName) {
         int id = getNextAvailableId();
         // create an id and put it in the hashset
         GameData newGame = new GameData(id, null, null, gameName, new ChessGame());

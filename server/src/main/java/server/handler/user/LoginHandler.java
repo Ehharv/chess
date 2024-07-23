@@ -3,7 +3,6 @@ package server.handler.user;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dataaccess.DataAccessException;
 import model.AuthData;
 import service.UserService;
 import service.exceptions.ErrorMessage;
@@ -20,7 +19,7 @@ public class LoginHandler implements Route {
     }
 
     @Override
-    public Object handle(Request req, Response res) throws DataAccessException {
+    public Object handle(Request req, Response res) {
         // get the username and password from json
         Gson gson = new Gson();
         JsonObject jsonObject = JsonParser.parseString(req.body()).getAsJsonObject();

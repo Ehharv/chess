@@ -3,8 +3,6 @@ package dataaccess;
 import chess.ChessGame;
 import model.GameData;
 
-import java.util.List;
-
 public interface GameDao {
     /**
      * Clears the database of all games
@@ -16,27 +14,27 @@ public interface GameDao {
      *
      * @param game the game to create
      */
-    void add(GameData game) throws DataAccessException;
+    void add(GameData game);
 
     /**
      * finds a game by its id
      *
      * @param id the game to find and return
      */
-    GameData getGame(int id) throws DataAccessException;
+    GameData getGame(int id);
 
     /**
      * returns a list of all the games
      *
      */
-    GameData[] getAllGames() throws DataAccessException;
+    GameData[] getAllGames();
 
     /**
      * makes a new game and returns the id
      *
      * @param gameName name of the game to create
      */
-    int createGame(String gameName) throws DataAccessException;
+    int createGame(String gameName);
 
     /**
      * adds a player to the game

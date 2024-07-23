@@ -1,7 +1,6 @@
 package server.handler.user;
 
 import com.google.gson.Gson;
-import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
 import service.UserService;
@@ -20,7 +19,7 @@ public class RegisterHandler implements Route {
     }
 
     @Override
-    public Object handle(Request req, Response res) throws DataAccessException {
+    public Object handle(Request req, Response res) {
         Gson gson = new Gson();
         UserData user;
         try {

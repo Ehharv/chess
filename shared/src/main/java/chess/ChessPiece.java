@@ -60,29 +60,14 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        MoveCalculator calculator;
-        switch (type) {
-            case BISHOP:
-                calculator = new BishopCalculator();
-                break;
-            case KING:
-                calculator = new KingCalculator();
-                break;
-            case QUEEN:
-                calculator = new QueenCalculator();
-                break;
-            case ROOK:
-                calculator = new RookCalculator();
-                break;
-            case KNIGHT:
-                calculator = new KnightCalculator();
-                break;
-            case PAWN:
-                calculator = new PawnCalculator();
-                break;
-            default:
-                calculator = new BishopCalculator();
-        }
+        MoveCalculator calculator = switch (type) {
+            case BISHOP -> new BishopCalculator();
+            case KING -> new KingCalculator();
+            case QUEEN -> new QueenCalculator();
+            case ROOK -> new RookCalculator();
+            case KNIGHT -> new KnightCalculator();
+            case PAWN -> new PawnCalculator();
+        };
         return calculator.pieceMoves(board, myPosition);
     }
 

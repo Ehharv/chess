@@ -158,13 +158,13 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
 
         ChessPosition kingPosition = findKing(teamColor, board);
-        // itteratae through the whole board
+        // iterate through the whole board
         for(int row =  1; row <= 8; row++){
             for(int col =  1; col <= 8; col++){
                 ChessPosition position = new ChessPosition(row, col); // current square
                 ChessPiece piece = board.getPiece(position); // what piece is at the square
                 if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
-                    for (ChessMove move : piece.pieceMoves(board, position)) { // iterate through all the posible moves
+                    for (ChessMove move : piece.pieceMoves(board, position)) { // iterate through all the possible moves
                         if (move.getEndPosition().equals(kingPosition)) { // check if the end position will be where the king is
                             return true;
                         }
@@ -178,14 +178,14 @@ public class ChessGame {
 
     private boolean theoreticalIsInCheck(TeamColor teamColor, ChessBoard localBoard) {
         ChessPosition kingPosition = findKing(teamColor, localBoard);
-        // itteratae through the whole board
+        // iterate through the whole board
         for(int row =  1; row <= 8; row++){
             for(int col =  1; col <= 8; col++){
                 ChessPosition position = new ChessPosition(row, col); // current square
                 ChessPiece piece = localBoard.getPiece(position); // what piece is at the square
                 if(piece != null && piece.getTeamColor() != teamColor) { // enemy piece
                     Collection<ChessMove> allMoves = piece.pieceMoves(localBoard, position);
-                    for (ChessMove move : allMoves) { // iterate through all the posible moves
+                    for (ChessMove move : allMoves) { // iterate through all the possible moves
                         if (move.getEndPosition().equals(kingPosition)) { // check if the end position will be where the king is
                             return true;
                         }
@@ -220,7 +220,7 @@ public class ChessGame {
                             }
                             boardCopy.addPiece(move.getStartPosition(), null); // remove piece
                             if(!theoreticalIsInCheck(teamColor, boardCopy)){
-                                return false; //if any one move makes the king not in check, then its not checkmate
+                                return false; //if any one move makes the king not in check, then it is not checkmate
                             }
                         }
                     }

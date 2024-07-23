@@ -17,13 +17,9 @@ import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameServiceTest {
-    private UserDao userDao;
-    private AuthDao authDao;
     private GameDao gameDao;
     private String authToken;
     private GameService gameService;
@@ -33,8 +29,8 @@ class GameServiceTest {
     @BeforeEach
     public void clearBeforeTests() throws DataAccessException, BadRequestException, AlreadyTakenException {
         // init daos
-        userDao = new MemoryUserDao();
-        authDao = new MemoryAuthDao();
+        UserDao userDao = new MemoryUserDao();
+        AuthDao authDao = new MemoryAuthDao();
         gameDao = new MemoryGameDao();
 
         new ClearService(userDao, authDao, gameDao).clear();
@@ -49,8 +45,8 @@ class GameServiceTest {
     }
 
     @Test
-    public void testValidListGames() throws DataAccessException, UnauthorizedException {
-        // given a valid authtoken of a registered user
+    public void testValidListGames() throws UnauthorizedException {
+        // given a valid auth token of a registered user
         // we haven't added any games yet
         assertEquals(0, gameService.listGames(authToken).length);
     }
@@ -58,11 +54,11 @@ class GameServiceTest {
     @Test
     public void testInvalidListGames(){
         // no valid auth token provided
-        assertThrows(UnauthorizedException.class, () -> {gameService.listGames("invalidAuthToken");});
+        assertThrows(UnauthorizedException.class, () -> gameService.listGames("invalidAuthToken"));
     }
 
     @Test
-    public void testValidAddGame() throws UnauthorizedException, BadRequestException, DataAccessException {
+    public void testValidAddGame() throws UnauthorizedException, BadRequestException {
         int newGameID = gameService.addGame(authToken, "valid game name");
         int expectedGameID = 1;
 
@@ -73,11 +69,11 @@ class GameServiceTest {
     @Test
     public void testInvalidAddGame(){
         // no game name given
-        assertThrows(BadRequestException.class, () -> {gameService.addGame(authToken, null);});
+        assertThrows(BadRequestException.class, () -> gameService.addGame(authToken, null));
     }
 
     @Test
-    public void testValidJoinGame() throws UnauthorizedException, BadRequestException, DataAccessException, AlreadyTakenException {
+    public void testValidJoinGame() throws UnauthorizedException, BadRequestException, AlreadyTakenException {
         int newGameID = gameService.addGame(authToken, "valid game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 
@@ -89,15 +85,15 @@ class GameServiceTest {
     }
 
     @Test
-    public void testInvalidJoinGame() throws UnauthorizedException, BadRequestException, DataAccessException, AlreadyTakenException {
+    public void testInvalidJoinGame() throws UnauthorizedException, BadRequestException, AlreadyTakenException {
         int newGameID = gameService.addGame(authToken, "valid game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 
         gameService.joinGame(authToken, color, newGameID); // join game 1 as white with good authToken
         // try to game 1 as white again
-        assertThrows(AlreadyTakenException.class, () ->{gameService.joinGame(authToken, color, newGameID);});
+        assertThrows(AlreadyTakenException.class, () -> gameService.joinGame(authToken, color, newGameID));
         // try to join a noexistent game 2
-        assertThrows(BadRequestException.class, () -> {gameService.joinGame(authToken, color, 2);});
+        assertThrows(BadRequestException.class, () -> gameService.joinGame(authToken, color, 2));
     }
 
 }

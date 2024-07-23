@@ -13,17 +13,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClearServiceTest {
-    private UserDao userDao;
-    private AuthDao authDao;
-    private GameDao gameDao;
 
 
     @Test
     void testClearService() throws DataAccessException {
         // init daos
-        userDao = new MemoryUserDao();
-        authDao = new MemoryAuthDao();
-        gameDao = new MemoryGameDao();
+        UserDao userDao = new MemoryUserDao();
+        AuthDao authDao = new MemoryAuthDao();
+        GameDao gameDao = new MemoryGameDao();
 
         // make data to insert
         UserData user = new UserData("user1", "password", "email");

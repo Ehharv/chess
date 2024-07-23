@@ -16,9 +16,9 @@ public interface UserDao {
     void add(UserData user) throws DataAccessException;
 
     /**
-     * retrives a user with the give username
+     * retrieves a user with the give username
      *
-     * @param username the username of the user to retrive
+     * @param username the username of the user to retrieve
      * @return the matching user
      */
     UserData getUser(String username);
@@ -35,7 +35,7 @@ public interface UserDao {
 
 
     /**
-     * Checks if the proposed username is avaiable for a new user
+     * Checks if the proposed username is available for a new user
      *
      * @param username the username entered when creating a new user
      * @return if the username is available

@@ -1,7 +1,6 @@
 package server.handler.user;
 
 import com.google.gson.Gson;
-import dataaccess.DataAccessException;
 import service.UserService;
 import service.exceptions.ErrorMessage;
 import service.exceptions.UnauthorizedException;
@@ -18,7 +17,7 @@ public class LogoutHandler implements Route {
     }
 
     @Override
-    public Object handle(Request req, Response res) throws DataAccessException {
+    public Object handle(Request req, Response res) {
         Gson gson = new Gson();
 
         String authToken = req.headers("authorization");

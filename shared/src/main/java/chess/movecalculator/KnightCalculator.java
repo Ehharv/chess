@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class KnightCalculator implements MoveCalculator {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
+        Collection<ChessMove> validMoves = new ArrayList<>();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();

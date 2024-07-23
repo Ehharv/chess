@@ -16,14 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
     private UserDao userDao;
     private AuthDao authDao;
-    private GameDao gameDao;
 
     @BeforeEach
-    public void clearBeforeTests() throws DataAccessException {
+    public void clearBeforeTests() {
         // init daos
         userDao = new MemoryUserDao();
         authDao = new MemoryAuthDao();
-        gameDao = new MemoryGameDao();
+        GameDao gameDao = new MemoryGameDao();
 
         new ClearService(userDao, authDao, gameDao).clear();
 
@@ -64,7 +63,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testInvalidLogin() throws DataAccessException, UnauthorizedException, BadRequestException, AlreadyTakenException {
+    void testInvalidLogin() {
         UserData user = new UserData("username", "password", "email@email.com");
 
         // login a user without registering
@@ -83,7 +82,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testInvalidLogout() throws BadRequestException, DataAccessException, AlreadyTakenException, UnauthorizedException {
+    void testInvalidLogout() {
         assertThrows(UnauthorizedException.class, () -> new UserService(userDao, authDao).logout("authToken"));
     }
 }

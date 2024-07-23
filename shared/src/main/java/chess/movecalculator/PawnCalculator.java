@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class PawnCalculator implements MoveCalculator{
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition){
-        Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
+        Collection<ChessMove> validMoves = new ArrayList<>();
         ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -31,10 +31,7 @@ public class PawnCalculator implements MoveCalculator{
             ChessPosition newPosition = new ChessPosition(newRow, col);
             if(board.getPiece(newPosition) == null){ // empty space
                if(newRow == promotionRow){
-                   validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.QUEEN));
-                   validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.BISHOP));
-                   validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.KNIGHT));
-                   validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.ROOK));
+                   addPromotedMove(myPosition, validMoves, newPosition);
                } else{
                    validMoves.add(new ChessMove(myPosition, newPosition, null));
                }
@@ -58,10 +55,7 @@ public class PawnCalculator implements MoveCalculator{
                     if((board.getPiece(diagonalPosition) != null) && // piece in diagonal spot
                             (board.getPiece(diagonalPosition).getTeamColor() != color)){ // enemy in diagonal
                         if(newRow == promotionRow){ // capture and promotion
-                            validMoves.add(new ChessMove(myPosition, diagonalPosition, ChessPiece.PieceType.QUEEN));
-                            validMoves.add(new ChessMove(myPosition, diagonalPosition, ChessPiece.PieceType.BISHOP));
-                            validMoves.add(new ChessMove(myPosition, diagonalPosition, ChessPiece.PieceType.KNIGHT));
-                            validMoves.add(new ChessMove(myPosition, diagonalPosition, ChessPiece.PieceType.ROOK));
+                            addPromotedMove(myPosition, validMoves, diagonalPosition);
                         } else{
                             validMoves.add(new ChessMove(myPosition, diagonalPosition, null)); // not promotion
                         }
@@ -72,5 +66,12 @@ public class PawnCalculator implements MoveCalculator{
             }
         }
         return validMoves;
+    }
+
+    private static void addPromotedMove(ChessPosition myPosition, Collection<ChessMove> validMoves, ChessPosition newPosition) {
+        validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.QUEEN));
+        validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.BISHOP));
+        validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.KNIGHT));
+        validMoves.add(new ChessMove(myPosition, newPosition, ChessPiece.PieceType.ROOK));
     }
 }

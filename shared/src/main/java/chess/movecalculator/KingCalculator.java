@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public class KingCalculator implements MoveCalculator {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
+        Collection<ChessMove> validMoves = new ArrayList<>();
 
         CalcFunctions.checkLowerLeft(board, myPosition, 1, validMoves);
         CalcFunctions.checkLowerRight(board, myPosition, 1, validMoves);

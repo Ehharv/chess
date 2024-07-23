@@ -22,13 +22,13 @@ public class JoinGameHandler implements Route {
     }
 
     @Override
-    public Object handle(Request req, Response res) throws BadRequestException {
+    public Object handle(Request req, Response res) {
         Gson gson = new Gson();
 
         // parse request
         String authToken = req.headers("authorization");
         JsonObject jsonObject = JsonParser.parseString(req.body()).getAsJsonObject();
-        Integer gameId;
+        int gameId;
         chess.ChessGame.TeamColor color;
         try{
             try{

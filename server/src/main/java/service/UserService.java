@@ -10,8 +10,8 @@ import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
 public class UserService {
-    private UserDao userDao;
-    private AuthDao authDao;
+    private final UserDao userDao;
+    private final AuthDao authDao;
 
     public UserService(UserDao userDao, AuthDao authDao) {
         this.userDao = userDao;
@@ -22,7 +22,7 @@ public class UserService {
      * Adds a new user including username, password, and email
      *
      * @param user the user to add to the users database
-     * @return an authtoken associated with the username
+     * @return an auth token associated with the username
      * @throws DataAccessException
      * @throws AlreadyTakenException
      * @throws BadRequestException
@@ -54,9 +54,8 @@ public class UserService {
      * @param password
      * @return a new auth token associated with this username
      * @throws UnauthorizedException
-     * @throws DataAccessException
      */
-    public AuthData login(String username, String password) throws UnauthorizedException, DataAccessException {
+    public AuthData login(String username, String password) throws UnauthorizedException {
         AuthData authData;
         if (username != null && password != null) {
             if (userDao.isValidLogin(username, password)) {
@@ -75,11 +74,10 @@ public class UserService {
     /**
      * removes the authToken association with the corresponding username
      *
-     * @param authToken the authtoken of a user
+     * @param authToken the auth token of a user
      * @throws UnauthorizedException
-     * @throws DataAccessException
      */
-    public void logout(String authToken) throws UnauthorizedException, DataAccessException {
+    public void logout(String authToken) throws UnauthorizedException {
         // make sure this token exists then remove it
         if (authDao.getAuthByToken(authToken) != null) {
             authDao.remove(authToken);

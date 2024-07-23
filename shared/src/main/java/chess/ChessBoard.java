@@ -97,28 +97,14 @@ public class ChessBoard {
             for (int col = 1; col <= 8; col++) {
                 String square;
                 try {
-                    switch (this.getPiece(new ChessPosition(row, col)).getPieceType()) {
-                        case PAWN:
-                            square = "|p|";
-                            break;
-                        case KNIGHT:
-                            square = "|n|";
-                            break;
-                        case BISHOP:
-                            square = "|b|";
-                            break;
-                        case QUEEN:
-                            square = "|q|";
-                            break;
-                        case KING:
-                            square = "|k|";
-                            break;
-                        case ROOK:
-                            square = "|r|";
-                            break;
-                        default:
-                            square = "|_|";
-                    }
+                    square = switch (this.getPiece(new ChessPosition(row, col)).getPieceType()) {
+                        case PAWN -> "|p|";
+                        case KNIGHT -> "|n|";
+                        case BISHOP -> "|b|";
+                        case QUEEN -> "|q|";
+                        case KING -> "|k|";
+                        case ROOK -> "|r|";
+                    };
                 } catch (NullPointerException e) {
                     square = "|_|";
                 }

@@ -6,7 +6,7 @@ public interface AuthDao {
     void clear();
 
     /**
-     * retrives a user's authdata with the given username
+     * retrieves a user's auth data with the given username
      *
      * @param username of the data to retrieve
      * @return the authdata
@@ -14,7 +14,7 @@ public interface AuthDao {
      AuthData getAuthByUsername(String username);
 
     /**
-     * retrives a user's authdata with the given token
+     * retrieves a user's auth data with the given token
      *
      * @param token of the data to retrieve
      * @return the authdata
@@ -22,16 +22,16 @@ public interface AuthDao {
     AuthData getAuthByToken(String token);
 
     /**
-     * Adds an authtoken
+     * Adds an auth token
      *
      * @param authData the auth token to add
      */
-    void add(AuthData authData) throws DataAccessException;
+    void add(AuthData authData);
 
     /**
-     * Removes an authtoken when loggin out
+     * Removes an auth token when logging out
      *
      * @param authToken the auth token to find and remove
      */
-    void remove(String authToken) throws DataAccessException;
+    void remove(String authToken);
 }
