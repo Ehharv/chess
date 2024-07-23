@@ -30,21 +30,8 @@ public class PawnCalculator implements MoveCalculator{
         if((newRow >= 1) && (newRow <= 8)){
             ChessPosition newPosition = new ChessPosition(newRow, col);
             if(board.getPiece(newPosition) == null){ // empty space
-               if(newRow == promotionRow){
-                   addPromotedMove(myPosition, validMoves, newPosition);
-               } else{
-                   validMoves.add(new ChessMove(myPosition, newPosition, null));
-               }
-
-                // first move can only go two if the first space is also empty
-                if(row == startRow){
-                    int doubleRow = row + 2*forward;
-                    ChessPosition firstMove = new ChessPosition(doubleRow, col);
-                    if(board.getPiece(firstMove)
-                            == null){
-                        validMoves.add(new ChessMove(myPosition, firstMove, null));
-                    }
-                }
+                addPromoOrRegMove(myPosition, newRow, promotionRow, validMoves, newPosition);
+                addFirstMove(board, myPosition, row, startRow, forward, col, validMoves);
             }
             // capture
             int[] directions = {-1,1}; // check left and right diagonal
@@ -52,20 +39,39 @@ public class PawnCalculator implements MoveCalculator{
                 int newCol = col + diagonal;
                 if((newCol >= 1) && (newCol <= 8)) { // in board bounds
                     ChessPosition diagonalPosition = new ChessPosition(newRow, newCol);
-                    if((board.getPiece(diagonalPosition) != null) && // piece in diagonal spot
-                            (board.getPiece(diagonalPosition).getTeamColor() != color)){ // enemy in diagonal
-                        if(newRow == promotionRow){ // capture and promotion
-                            addPromotedMove(myPosition, validMoves, diagonalPosition);
-                        } else{
-                            validMoves.add(new ChessMove(myPosition, diagonalPosition, null)); // not promotion
-                        }
-
-                    }
+                    addCaptureMove(board, myPosition, diagonalPosition, color, newRow, promotionRow, validMoves);
 
                 }
             }
         }
         return validMoves;
+    }
+
+    private static void addPromoOrRegMove(ChessPosition myPosition, int newRow, int promotionRow, Collection<ChessMove> validMoves, ChessPosition newPosition) {
+        if(newRow == promotionRow){
+            addPromotedMove(myPosition, validMoves, newPosition);
+        } else{
+            validMoves.add(new ChessMove(myPosition, newPosition, null));
+        }
+    }
+
+    private static void addCaptureMove(ChessBoard board, ChessPosition myPosition, ChessPosition diagonalPosition, ChessGame.TeamColor color, int newRow, int promotionRow, Collection<ChessMove> validMoves) {
+        if((board.getPiece(diagonalPosition) != null) && // piece in diagonal spot
+                (board.getPiece(diagonalPosition).getTeamColor() != color)){ // enemy in diagonal
+            addPromoOrRegMove(myPosition, newRow, promotionRow, validMoves, diagonalPosition);
+
+        }
+    }
+
+    private static void addFirstMove(ChessBoard board, ChessPosition myPosition, int row, int startRow, int forward, int col, Collection<ChessMove> validMoves) {
+        // first move can only go two if the first space is also empty
+        if(row == startRow){
+            int doubleRow = row + 2* forward;
+            ChessPosition firstMove = new ChessPosition(doubleRow, col);
+            if(board.getPiece(firstMove) == null){
+                validMoves.add(new ChessMove(myPosition, firstMove, null));
+            }
+        }
     }
 
     private static void addPromotedMove(ChessPosition myPosition, Collection<ChessMove> validMoves, ChessPosition newPosition) {

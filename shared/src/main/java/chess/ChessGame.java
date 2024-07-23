@@ -16,17 +16,17 @@ import static chess.ChessPiece.PieceType.KING;
  */
 public class ChessGame {
     private ChessBoard board;
-    private TeamColor TeamTurn;
+    private TeamColor teamTurn;
 
     public ChessGame() {
         this.board = new ChessBoard();
         this.board.resetBoard();
-        this.TeamTurn = WHITE; // white goes first
+        this.teamTurn = WHITE; // white goes first
     }
 
     public ChessGame(ChessGame game){
         this.board = game.board;
-        this.TeamTurn = game.TeamTurn;
+        this.teamTurn = game.teamTurn;
     }
 
     /**
@@ -34,7 +34,7 @@ public class ChessGame {
      */
     public TeamColor getTeamTurn() {
 
-        return TeamTurn;
+        return teamTurn;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ChessGame {
      */
     public void setTeamTurn(TeamColor team) {
 
-        this.TeamTurn = team;
+        this.teamTurn = team;
     }
 
     /**
@@ -105,12 +105,12 @@ public class ChessGame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessGame chessGame = (ChessGame) o;
-        return Objects.equals(board, chessGame.board) && TeamTurn == chessGame.TeamTurn;
+        return Objects.equals(board, chessGame.board) && teamTurn == chessGame.teamTurn;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(board, TeamTurn);
+        return Objects.hash(board, teamTurn);
     }
 
     /**
