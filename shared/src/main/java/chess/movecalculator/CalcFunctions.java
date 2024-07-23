@@ -19,7 +19,8 @@ public class CalcFunctions {
      * @param colIncrement pos = right, neg = left,  0 = no horizontal movement
      * @param validMoves collection of moves
      */
-    private static void checkDirection(ChessBoard board, ChessPosition myPosition, int max, int rowIncrement, int colIncrement, Collection<ChessMove> validMoves) {
+    private static void checkDirection(ChessBoard board, ChessPosition myPosition, int max, int rowIncrement,
+                                       int colIncrement, Collection<ChessMove> validMoves) {
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
         ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();

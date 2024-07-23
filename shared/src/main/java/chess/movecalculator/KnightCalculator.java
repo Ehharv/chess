@@ -40,7 +40,8 @@ public class KnightCalculator implements MoveCalculator {
      * @param upDown how far we are checking up and down movement (either +-1 or +-2)
      * @param leftRight how far we are checking horizontal movement (either +-1 or +-2)
      */
-    private void knightMoves(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> validMoves, int row, int col, ChessGame.TeamColor color, int[] upDown, int[] leftRight) {
+    private void knightMoves(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> validMoves,
+                             int row, int col, ChessGame.TeamColor color, int[] upDown, int[] leftRight) {
         int newRow;
         int newCol;
         for (int ud : upDown) {
