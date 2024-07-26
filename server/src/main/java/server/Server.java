@@ -5,6 +5,9 @@ import dataaccess.*;
 import dataaccess.memory.MemoryAuthDao;
 import dataaccess.memory.MemoryGameDao;
 import dataaccess.memory.MemoryUserDao;
+import dataaccess.mysql.MysqlAuthDao;
+import dataaccess.mysql.MysqlGameDao;
+import dataaccess.mysql.MysqlUserDao;
 import server.handler.game.CreateGameHandler;
 import server.handler.game.JoinGameHandler;
 import server.handler.game.ListGamesHandler;
@@ -18,6 +21,8 @@ import service.exceptions.ErrorMessage;
 import spark.*;
 import service.ClearService;
 
+import java.sql.SQLException;
+
 public class Server {
 
     public int run(int desiredPort) {
@@ -26,9 +31,21 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Initialize DAOs
-        UserDao userDao = new MemoryUserDao();
-        AuthDao authDao = new MemoryAuthDao();
-        GameDao gameDao = new MemoryGameDao();
+//        UserDao userDao = new MemoryUserDao();
+//        AuthDao authDao = new MemoryAuthDao();
+//        GameDao gameDao = new MemoryGameDao();
+
+        UserDao userDao;
+        AuthDao authDao;
+        GameDao gameDao;
+
+        try {
+            userDao = new MysqlUserDao();
+            authDao = new MysqlAuthDao();
+            gameDao = new MysqlGameDao();
+        } catch (DataAccessException | SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         ClearService clearService = new ClearService(userDao, authDao, gameDao);
         UserService userService = new UserService(userDao, authDao);

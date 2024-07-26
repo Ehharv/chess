@@ -2,11 +2,13 @@ package dataaccess;
 
 import model.UserData;
 
+import java.sql.SQLException;
+
 public interface UserDao {
     /**
      * Clears the database of all users
      */
-    void clear();
+    void clear() throws SQLException, DataAccessException;
 
     /**
      * Creates a new user

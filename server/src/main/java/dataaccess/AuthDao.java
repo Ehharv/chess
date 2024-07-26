@@ -2,8 +2,10 @@ package dataaccess;
 
 import model.AuthData;
 
+import java.sql.SQLException;
+
 public interface AuthDao {
-    void clear();
+    void clear() throws SQLException, DataAccessException;
 
     /**
      * retrieves a user's auth data with the given username

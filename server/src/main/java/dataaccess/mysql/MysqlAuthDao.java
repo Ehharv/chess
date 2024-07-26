@@ -4,12 +4,18 @@ import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
 import model.AuthData;
 
+import java.sql.SQLException;
+
 public class MysqlAuthDao extends MysqlDao implements AuthDao {
 
-    protected MysqlAuthDao() throws DataAccessException {
+    public MysqlAuthDao() throws DataAccessException, SQLException {
+        super();
+
     }
 
-    public void clear(){
+    public void clear() throws SQLException, DataAccessException {
+        var statement = "TRUNCATE auth";
+        executeUpdate(statement);
     }
 
     public AuthData getAuthByUsername(String username){
@@ -32,7 +38,7 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
     protected String[] getCreateStatements() {
         return new String[]{
                 """
-            CREATE TABLE IF NOT EXISTS `user` (
+            CREATE TABLE IF NOT EXISTS `auth` (
             `authToken` VARCHAR(64) NOT NULL PRIMARY KEY,
             `username` VARCHAR(64) NOT NULL
             )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

@@ -3,11 +3,13 @@ package dataaccess;
 import chess.ChessGame;
 import model.GameData;
 
+import java.sql.SQLException;
+
 public interface GameDao {
     /**
      * Clears the database of all games
      */
-    void clear();
+    void clear() throws SQLException, DataAccessException;
 
     /**
      * Creates a new game

@@ -4,13 +4,17 @@ import dataaccess.DataAccessException;
 import dataaccess.UserDao;
 import model.UserData;
 
+import java.sql.SQLException;
+
 public class MysqlUserDao extends MysqlDao implements UserDao  {
 
-    protected MysqlUserDao() throws DataAccessException {
+    public MysqlUserDao() throws DataAccessException {
+        super();
     }
 
-    public void clear(){
-
+    public void clear() throws SQLException, DataAccessException {
+        var statement = "TRUNCATE user";
+        executeUpdate(statement);
     }
 
     public void add(UserData user){

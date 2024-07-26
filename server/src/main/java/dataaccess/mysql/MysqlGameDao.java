@@ -5,13 +5,17 @@ import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import model.GameData;
 
+import java.sql.SQLException;
+
 public class MysqlGameDao extends MysqlDao implements GameDao {
 
-    protected MysqlGameDao() throws DataAccessException {
+    public MysqlGameDao() throws DataAccessException {
+        super();
     }
 
-    public void clear(){
-
+    public void clear() throws SQLException, DataAccessException {
+        var statement = "TRUNCATE game";
+        executeUpdate(statement);
     }
     public void add(GameData game){
 
@@ -38,12 +42,12 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
     protected String[] getCreateStatements() {
         return new String[]{
                 """
-            CREATE TABLE IF NOT EXISTS `user` (
+            CREATE TABLE IF NOT EXISTS `game` (
             `gameID` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-            'gameName' VARCHAR(64),
+            `gameName` VARCHAR(64) NOT NULL,
             `whiteUsername` VARCHAR(64),
             `blackUsername` VARCHAR(64),
-            'game' LONGTEXT NOT NULL
+            `game` LONGTEXT NOT NULL
             )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
             """
         };
