@@ -1,10 +1,14 @@
 package dataaccess.mysql;
 
 import chess.ChessGame;
+import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import model.GameData;
 
-public class MysqlGameDao implements GameDao {
+public class MysqlGameDao extends MysqlDao implements GameDao {
+
+    protected MysqlGameDao() throws DataAccessException {
+    }
 
     public void clear(){
 
@@ -30,7 +34,8 @@ public class MysqlGameDao implements GameDao {
 
     }
 
-    private String[] getCreateStatements() {
+    @Override
+    protected String[] getCreateStatements() {
         return new String[]{
                 """
             CREATE TABLE IF NOT EXISTS `user` (

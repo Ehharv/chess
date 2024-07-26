@@ -1,9 +1,13 @@
 package dataaccess.mysql;
 
+import dataaccess.DataAccessException;
 import dataaccess.UserDao;
 import model.UserData;
 
-public class MysqlUserDao implements UserDao {
+public class MysqlUserDao extends MysqlDao implements UserDao  {
+
+    protected MysqlUserDao() throws DataAccessException {
+    }
 
     public void clear(){
 
@@ -25,7 +29,8 @@ public class MysqlUserDao implements UserDao {
         return false;
     }
 
-    private String[] getCreateStatements() {
+    @Override
+    protected String[] getCreateStatements() {
         return new String[]{
             """
             CREATE TABLE IF NOT EXISTS `user` (

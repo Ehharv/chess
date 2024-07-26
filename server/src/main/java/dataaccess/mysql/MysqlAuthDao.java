@@ -1,9 +1,13 @@
 package dataaccess.mysql;
 
 import dataaccess.AuthDao;
+import dataaccess.DataAccessException;
 import model.AuthData;
 
-public class MysqlAuthDao implements AuthDao {
+public class MysqlAuthDao extends MysqlDao implements AuthDao {
+
+    protected MysqlAuthDao() throws DataAccessException {
+    }
 
     public void clear(){
     }
@@ -24,7 +28,8 @@ public class MysqlAuthDao implements AuthDao {
 
     }
 
-    private String[] getCreateStatements() {
+    @Override
+    protected String[] getCreateStatements() {
         return new String[]{
                 """
             CREATE TABLE IF NOT EXISTS `user` (
