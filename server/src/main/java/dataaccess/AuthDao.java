@@ -35,5 +35,5 @@ public interface AuthDao {
      *
      * @param authToken the auth token to find and remove
      */
-    void remove(String authToken);
+    void remove(String authToken) throws DataAccessException;
 }

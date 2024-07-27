@@ -79,7 +79,7 @@ public class UserService {
      * @param authToken the auth token of a user
      * @throws UnauthorizedException
      */
-    public void logout(String authToken) throws UnauthorizedException {
+    public void logout(String authToken) throws UnauthorizedException, DataAccessException {
         // make sure this token exists then remove it
         if (authDao.getAuthByToken(authToken) != null) {
             authDao.remove(authToken);

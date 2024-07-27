@@ -44,9 +44,9 @@ public class MysqlUserDao extends MysqlDao implements UserDao  {
     public UserData getUser(String username) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT username, password, email FROM user WHERE username=?";
-            try (var ps = conn.prepareStatement(statement)) {
-                ps.setString(1, username);
-                try (var rs = ps.executeQuery()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setString(1, username);
+                try (var rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {
                        return readUser(rs);
                     }
@@ -68,9 +68,9 @@ public class MysqlUserDao extends MysqlDao implements UserDao  {
     public boolean isValidLogin(String username, String password) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT password FROM user WHERE username=?";
-            try (var ps = conn.prepareStatement(statement)) {
-                ps.setString(1, username);
-                try (var rs = ps.executeQuery()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setString(1, username);
+                try (var rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {
                         // check hashed password against provided clearText password
                         String hashedPassword = rs.getString("password");
@@ -88,11 +88,11 @@ public class MysqlUserDao extends MysqlDao implements UserDao  {
     public boolean isUsernameAvailable(String username) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT username FROM user WHERE username=?";
-            try (var ps = conn.prepareStatement(statement)) {
-                ps.setString(1, username);
-                try (var rs = ps.executeQuery()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setString(1, username);
+                try (var rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {
-                        // if results, then there are matches to the username, and it's not availabe
+                        // if results, then there are matches to the username, and it's not available
                       return false;
                     }
                 }
