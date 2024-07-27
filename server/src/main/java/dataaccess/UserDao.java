@@ -33,7 +33,7 @@ public interface UserDao {
      * @param password the password entered when logging in
      * @return if there is a matching user with the same username and password
      */
-    boolean isValidLogin(String username, String password);
+    boolean isValidLogin(String username, String password) throws DataAccessException;
 
 
     /**

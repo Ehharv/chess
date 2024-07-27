@@ -65,7 +65,22 @@ public class MysqlUserDao extends MysqlDao implements UserDao  {
         return new UserData(username, password, email);
     }
 
-    public boolean isValidLogin(String username, String password){
+    public boolean isValidLogin(String username, String password) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT password FROM user WHERE username=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setString(1, username);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String hashedPassword = rs.getString("password");
+                        return BCrypt.checkpw(password, hashedPassword);
+
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
         return false;
     }
 
