@@ -7,6 +7,7 @@ import dataaccess.UserDao;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MysqlUserDao extends MysqlDao implements UserDao  {
@@ -40,8 +41,28 @@ public class MysqlUserDao extends MysqlDao implements UserDao  {
         }
     }
 
-    public UserData getUser(String username){
+    public UserData getUser(String username) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT username, password, email FROM user WHERE username=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setString(1, username);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                       return readUser(rs);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
         return null;
+    }
+
+    private UserData readUser(ResultSet rs) throws SQLException {
+        String username = rs.getString("username");
+        String password = rs.getString("password");
+        String email = rs.getString("email");
+        return new UserData(username, password, email);
     }
 
     public boolean isValidLogin(String username, String password){

@@ -23,7 +23,7 @@ public interface UserDao {
      * @param username the username of the user to retrieve
      * @return the matching user
      */
-    UserData getUser(String username);
+    UserData getUser(String username) throws DataAccessException;
 
 
     /**
