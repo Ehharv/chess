@@ -15,7 +15,7 @@ public interface UserDao {
      *
      * @param user the user to create
      */
-    void add(UserData user) throws DataAccessException;
+    void add(UserData user) throws DataAccessException, SQLException;
 
     /**
      * retrieves a user with the give username

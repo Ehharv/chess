@@ -9,6 +9,8 @@ import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
+import java.sql.SQLException;
+
 public class UserService {
     private final UserDao userDao;
     private final AuthDao authDao;
@@ -27,7 +29,7 @@ public class UserService {
      * @throws AlreadyTakenException
      * @throws BadRequestException
      */
-    public AuthData register(UserData user) throws DataAccessException, AlreadyTakenException, BadRequestException {
+    public AuthData register(UserData user) throws DataAccessException, AlreadyTakenException, BadRequestException, SQLException {
         AuthData authData;
         // must have valid input to create a user
         if(user != null && user.username() != null && user.password() != null) {
@@ -55,7 +57,7 @@ public class UserService {
      * @return a new auth token associated with this username
      * @throws UnauthorizedException
      */
-    public AuthData login(String username, String password) throws UnauthorizedException {
+    public AuthData login(String username, String password) throws UnauthorizedException, DataAccessException {
         AuthData authData;
         if (username != null && password != null) {
             if (userDao.isValidLogin(username, password)) {

@@ -11,6 +11,8 @@ import service.exceptions.AlreadyTakenException;
 import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
@@ -18,7 +20,7 @@ class UserServiceTest {
     private AuthDao authDao;
 
     @BeforeEach
-    public void clearBeforeTests() {
+    public void clearBeforeTests() throws SQLException, DataAccessException {
         // init daos
         userDao = new MemoryUserDao();
         authDao = new MemoryAuthDao();
@@ -29,7 +31,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidRegistration() throws DataAccessException, BadRequestException, AlreadyTakenException {
+    void testValidRegistration() throws DataAccessException, BadRequestException, AlreadyTakenException, SQLException {
 
         UserData user = new UserData("username", "password", "email@email.com");
         AuthData registeredUser = new UserService(userDao, authDao).register(user);
@@ -44,7 +46,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testInvalidRegistration() throws DataAccessException, BadRequestException, AlreadyTakenException {
+    void testInvalidRegistration() throws DataAccessException, BadRequestException, AlreadyTakenException, SQLException {
         UserData user = new UserData("username", "password", "email@email.com");
         new UserService(userDao, authDao).register(user);
 
@@ -52,7 +54,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidLogin() throws DataAccessException, UnauthorizedException, BadRequestException, AlreadyTakenException {
+    void testValidLogin() throws DataAccessException, UnauthorizedException, BadRequestException, AlreadyTakenException, SQLException {
         UserData user = new UserData("username", "password", "email@email.com");
         new UserService(userDao, authDao).register(user);
 
@@ -71,7 +73,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidLogout() throws BadRequestException, DataAccessException, AlreadyTakenException, UnauthorizedException {
+    void testValidLogout() throws BadRequestException, DataAccessException, AlreadyTakenException, UnauthorizedException, SQLException {
         UserData user = new UserData("username", "password", "email@email.com");
         AuthData authData = new UserService(userDao, authDao).register(user);
 

@@ -28,7 +28,7 @@ public interface AuthDao {
      *
      * @param authData the auth token to add
      */
-    void add(AuthData authData);
+    void add(AuthData authData) throws DataAccessException;
 
     /**
      * Removes an auth token when logging out

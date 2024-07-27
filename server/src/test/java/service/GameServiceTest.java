@@ -17,6 +17,8 @@ import service.exceptions.BadRequestException;
 import service.exceptions.UnauthorizedException;
 
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameServiceTest {
@@ -27,7 +29,7 @@ class GameServiceTest {
 
 
     @BeforeEach
-    public void clearBeforeTests() throws DataAccessException, BadRequestException, AlreadyTakenException {
+    public void clearBeforeTests() throws DataAccessException, BadRequestException, AlreadyTakenException, SQLException {
         // init daos
         UserDao userDao = new MemoryUserDao();
         AuthDao authDao = new MemoryAuthDao();

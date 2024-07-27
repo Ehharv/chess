@@ -2,7 +2,9 @@ package dataaccess.mysql;
 
 import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
 import model.AuthData;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 
@@ -26,8 +28,20 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
         return null;
     }
 
-    public void add(AuthData authData){
+    public void add(AuthData authData) throws DataAccessException {
+        var statement = "INSERT INTO `auth` (authToken, username) VALUES (?, ?)";
 
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+
+            // fill in variables in the statement
+            preparedStatement.setString(1, authData.authToken());
+            preparedStatement.setString(2, authData.username());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException | DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     public void remove(String authToken){
