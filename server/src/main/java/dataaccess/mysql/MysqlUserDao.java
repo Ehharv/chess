@@ -72,6 +72,7 @@ public class MysqlUserDao extends MysqlDao implements UserDao  {
                 ps.setString(1, username);
                 try (var rs = ps.executeQuery()) {
                     if (rs.next()) {
+                        // check hashed password against provided clearText password
                         String hashedPassword = rs.getString("password");
                         return BCrypt.checkpw(password, hashedPassword);
 
@@ -84,7 +85,21 @@ public class MysqlUserDao extends MysqlDao implements UserDao  {
         return false;
     }
 
-    public boolean isUsernameAvailable(String username){
+    public boolean isUsernameAvailable(String username) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT username FROM user WHERE username=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setString(1, username);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        // if results, then there are matches to the username, and it's not availabe
+                      return false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
         return true;
     }
 

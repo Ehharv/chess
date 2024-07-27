@@ -42,6 +42,6 @@ public interface UserDao {
      * @param username the username entered when creating a new user
      * @return if the username is available
      */
-    boolean isUsernameAvailable(String username);
+    boolean isUsernameAvailable(String username) throws DataAccessException;
 
 }
