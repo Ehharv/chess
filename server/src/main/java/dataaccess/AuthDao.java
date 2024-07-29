@@ -13,7 +13,7 @@ public interface AuthDao {
      * @param username of the data to retrieve
      * @return the authdata
      */
-     AuthData getAuthByUsername(String username);
+     AuthData getAuthByUsername(String username) throws DataAccessException;
 
     /**
      * retrieves a user's auth data with the given token
@@ -21,7 +21,7 @@ public interface AuthDao {
      * @param token of the data to retrieve
      * @return the authdata
      */
-    AuthData getAuthByToken(String token);
+    AuthData getAuthByToken(String token) throws DataAccessException;
 
     /**
      * Adds an auth token

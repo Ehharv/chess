@@ -20,11 +20,37 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
         executeUpdate(statement);
     }
 
-    public AuthData getAuthByUsername(String username){
+    public AuthData getAuthByUsername(String username) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT authToken FROM auth WHERE username=?";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setString(1, username);
+                try (var rs = preparedStatement.executeQuery()) {
+                    if (rs.next()) {
+                        return new AuthData(username, rs.getString("authToken"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
         return null;
     }
 
-    public AuthData getAuthByToken(String token){
+    public AuthData getAuthByToken(String token) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT username FROM auth WHERE authToken=?";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setString(1, token);
+                try (var rs = preparedStatement.executeQuery()) {
+                    if (rs.next()) {
+                        return new AuthData(rs.getString("username"), token);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
         return null;
     }
 
