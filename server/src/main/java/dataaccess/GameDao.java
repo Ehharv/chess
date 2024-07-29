@@ -16,7 +16,7 @@ public interface GameDao {
      *
      * @param game the game to create
      */
-    void add(GameData game);
+    void add(GameData game) throws DataAccessException;
 
     /**
      * finds a game by its id
@@ -36,7 +36,7 @@ public interface GameDao {
      *
      * @param gameName name of the game to create
      */
-    int createGame(String gameName);
+    int createGame(String gameName) throws DataAccessException;
 
     /**
      * adds a player to the game
