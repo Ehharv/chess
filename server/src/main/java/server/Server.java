@@ -86,7 +86,7 @@ public class Server {
         return Spark.port();
     }
 
-    private static boolean isUnauthorized(String authToken, AuthDao authDao) {
+    private static boolean isUnauthorized(String authToken, AuthDao authDao) throws DataAccessException {
         return authToken == null || authToken.isEmpty() || authDao.getAuthByToken(authToken) == null;
     }
 

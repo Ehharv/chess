@@ -22,7 +22,7 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
 
     public AuthData getAuthByUsername(String username) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT authToken FROM auth WHERE username=?";
+            var statement = "SELECT authToken FROM `auth` WHERE username=?";
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.setString(1, username);
                 try (var rs = preparedStatement.executeQuery()) {
@@ -39,7 +39,7 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
 
     public AuthData getAuthByToken(String token) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT username FROM auth WHERE authToken=?";
+            var statement = "SELECT username FROM `auth` WHERE authToken=?";
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.setString(1, token);
                 try (var rs = preparedStatement.executeQuery()) {
@@ -71,7 +71,7 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
     }
 
     public void remove(String authToken) throws DataAccessException {
-        var statement = "DELETE FROM `auth` WHERE auth=?";
+        var statement = "DELETE FROM `auth` WHERE authToken=?";
 
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)) {

@@ -2,6 +2,7 @@ package service;
 
 import chess.ChessGame;
 import dataaccess.AuthDao;
+import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import model.GameData;
 import service.exceptions.AlreadyTakenException;
@@ -25,7 +26,7 @@ public class GameService {
      * @return the array of all games in the database
      * @throws UnauthorizedException
      */
-    public GameData[] listGames(String authToken) throws UnauthorizedException {
+    public GameData[] listGames(String authToken) throws UnauthorizedException, DataAccessException {
         if(authDao.getAuthByToken(authToken) !=  null){
             return gameDao.getAllGames();
         } else {
@@ -43,7 +44,7 @@ public class GameService {
      * @throws BadRequestException
      */
     public int addGame(String authToken, String gameName)
-            throws UnauthorizedException, BadRequestException {
+            throws UnauthorizedException, BadRequestException, DataAccessException {
         if(authDao.getAuthByToken(authToken) !=  null) {
             if(gameName != null) {
                 return gameDao.createGame(gameName);
@@ -66,7 +67,7 @@ public class GameService {
      * @throws AlreadyTakenException
      */
     public void joinGame(String authToken, chess.ChessGame.TeamColor color, int gameId)
-            throws UnauthorizedException, BadRequestException, AlreadyTakenException {
+            throws UnauthorizedException, BadRequestException, AlreadyTakenException, DataAccessException {
 
         if(authDao.getAuthByToken(authToken) !=  null) {
                 GameData game = gameDao.getGame(gameId);

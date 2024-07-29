@@ -60,7 +60,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void testValidAddGame() throws UnauthorizedException, BadRequestException {
+    public void testValidAddGame() throws UnauthorizedException, BadRequestException, DataAccessException {
         int newGameID = gameService.addGame(authToken, "valid game name");
         int expectedGameID = 1;
 
@@ -75,7 +75,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void testValidJoinGame() throws UnauthorizedException, BadRequestException, AlreadyTakenException {
+    public void testValidJoinGame() throws UnauthorizedException, BadRequestException, AlreadyTakenException, DataAccessException {
         int newGameID = gameService.addGame(authToken, "valid game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 
@@ -87,7 +87,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void testInvalidJoinGame() throws UnauthorizedException, BadRequestException, AlreadyTakenException {
+    public void testInvalidJoinGame() throws UnauthorizedException, BadRequestException, AlreadyTakenException, DataAccessException {
         int newGameID = gameService.addGame(authToken, "valid game name");
         chess.ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
 
