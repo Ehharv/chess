@@ -23,13 +23,13 @@ public interface GameDao {
      *
      * @param id the game to find and return
      */
-    GameData getGame(int id);
+    GameData getGame(int id) throws DataAccessException;
 
     /**
      * returns a list of all the games
      *
      */
-    GameData[] getAllGames();
+    GameData[] getAllGames() throws DataAccessException;
 
     /**
      * makes a new game and returns the id

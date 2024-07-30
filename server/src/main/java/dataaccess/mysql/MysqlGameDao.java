@@ -5,11 +5,16 @@ import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.GameDao;
+import model.AuthData;
 import model.GameData;
+import model.UserData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class MysqlGameDao extends MysqlDao implements GameDao {
 
@@ -43,12 +48,52 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
     }
 
 
-    public GameData getGame(int id){
+    public GameData getGame(int id) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT gameName, whiteUsername, blackUsername, game FROM `game` WHERE gameId=?";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setInt(1, id);
+                try (var rs = preparedStatement.executeQuery()) {
+                    if (rs.next()) {
+                        return readGame(rs);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
         return null;
     }
 
-    public GameData[] getAllGames(){
-        return null;
+    private GameData readGame(ResultSet rs) throws SQLException {
+        int gameId = rs.getInt("gameId");
+        String gameName = rs.getString("gameName");
+        String whiteUsername = rs.getString("whiteUsername");
+        String blackUsername = rs.getString("blackUsername");
+
+        Gson gson = new Gson();
+        var jsonGame = rs.getString("game");
+        ChessGame game = gson.fromJson(jsonGame, ChessGame.class);
+
+
+        return new GameData(gameId, gameName, whiteUsername, blackUsername, game);
+    }
+
+    public GameData[] getAllGames() throws DataAccessException {
+        List<GameData> gameList = new ArrayList<>();
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM `game`";
+            try (var preparedStatement = conn.prepareStatement(statement) ) {
+                try (var rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        gameList.add(readGame(rs));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
+        return gameList.toArray(new GameData[0]);
     }
 
     public int createGame(String gameName) throws DataAccessException {
