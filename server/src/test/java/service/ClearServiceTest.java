@@ -10,13 +10,15 @@ import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClearServiceTest {
 
 
     @Test
-    void testClearService() throws DataAccessException {
+    void testClearService() throws DataAccessException, SQLException {
         // init daos
         UserDao userDao = new MemoryUserDao();
         AuthDao authDao = new MemoryAuthDao();

@@ -47,7 +47,7 @@ class GameServiceTest {
     }
 
     @Test
-    public void testValidListGames() throws UnauthorizedException {
+    public void testValidListGames() throws UnauthorizedException, DataAccessException {
         // given a valid auth token of a registered user
         // we haven't added any games yet
         assertEquals(0, gameService.listGames(authToken).length);

@@ -45,6 +45,6 @@ public interface GameDao {
      * @param username
      * @param gameId
      */
-    void joinGame(ChessGame.TeamColor color, String username, int gameId);
+    void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException;
 }
 

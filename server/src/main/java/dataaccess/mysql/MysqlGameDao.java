@@ -49,8 +49,9 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
 
 
     public GameData getGame(int id) throws DataAccessException {
+        // FIXME this is where the error is being thrown
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT gameName, whiteUsername, blackUsername, game FROM `game` WHERE gameId=?";
+            var statement = "SELECT gameId, gameName, whiteUsername, blackUsername, game FROM game WHERE gameId=?";
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.setInt(1, id);
                 try (var rs = preparedStatement.executeQuery()) {
@@ -123,8 +124,26 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
         }
     }
 
-    public void joinGame(ChessGame.TeamColor color, String username, int gameId){
+    public void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException {
+        String statement;
 
+        if(color == ChessGame.TeamColor.BLACK){
+            statement = "UPDATE `game` SET blackUsername=? WHERE gameId=?";
+        } else{
+            statement = "UPDATE `game` SET whiteUsername=? WHERE gameId=?";
+        }
+
+        try (var conn = DatabaseManager.getConnection();
+        var preparedStatement = conn.prepareStatement(statement)) {
+
+            preparedStatement.setString(1, username);
+            preparedStatement.setInt(2, gameId);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException | DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
