@@ -30,11 +30,6 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        // Initialize DAOs
-//        UserDao userDao = new MemoryUserDao();
-//        AuthDao authDao = new MemoryAuthDao();
-//        GameDao gameDao = new MemoryGameDao();
-
         UserDao userDao;
         AuthDao authDao;
         GameDao gameDao;
