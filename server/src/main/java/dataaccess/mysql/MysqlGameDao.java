@@ -5,15 +5,12 @@ import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.GameDao;
-import model.AuthData;
 import model.GameData;
-import model.UserData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class MysqlGameDao extends MysqlDao implements GameDao {
@@ -49,7 +46,6 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
 
 
     public GameData getGame(int id) throws DataAccessException {
-        // FIXME this is where the error is being thrown
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT gameId, gameName, whiteUsername, blackUsername, game FROM game WHERE gameId=?";
             try (var preparedStatement = conn.prepareStatement(statement)) {
@@ -77,13 +73,13 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
         ChessGame game = gson.fromJson(jsonGame, ChessGame.class);
 
 
-        return new GameData(gameId, gameName, whiteUsername, blackUsername, game);
+        return new GameData(gameId, whiteUsername, blackUsername, gameName, game);
     }
 
     public GameData[] getAllGames() throws DataAccessException {
         List<GameData> gameList = new ArrayList<>();
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT * FROM `game`";
+            var statement = "SELECT gameId, gameName, whiteUsername, blackUsername, game FROM `game`";
             try (var preparedStatement = conn.prepareStatement(statement) ) {
                 try (var rs = preparedStatement.executeQuery()) {
                     while (rs.next()) {
@@ -98,17 +94,19 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
     }
 
     public int createGame(String gameName) throws DataAccessException {
-        var statement = "INSERT INTO `game` (gameName, game) VALUES (?, ?)";
+        var statement = "INSERT INTO `game` (gameName, whiteUsername, blackUsername, game) VALUES (?, ?, ?, ?)";
 
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
 
             // fill in variables in the statement
             preparedStatement.setString(1, gameName);
+            preparedStatement.setString(2, null);
+            preparedStatement.setString(3, null);
             // serialize the new game object
             Gson gson = new Gson();
             ChessGame game = new ChessGame();
-            preparedStatement.setString(2, gson.toJson(game));
+            preparedStatement.setString(4, gson.toJson(game));
 
             preparedStatement.executeUpdate();
 
@@ -135,7 +133,7 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
 
         try (var conn = DatabaseManager.getConnection();
         var preparedStatement = conn.prepareStatement(statement)) {
-
+            System.out.println(username);
             preparedStatement.setString(1, username);
             preparedStatement.setInt(2, gameId);
 

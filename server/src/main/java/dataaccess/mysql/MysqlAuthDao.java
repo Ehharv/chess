@@ -4,7 +4,6 @@ import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import model.AuthData;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 
@@ -27,7 +26,7 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
                 preparedStatement.setString(1, username);
                 try (var rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {
-                        return new AuthData(username, rs.getString("authToken"));
+                        return new AuthData(rs.getString("authToken"), username);
                     }
                 }
             }
@@ -44,7 +43,7 @@ public class MysqlAuthDao extends MysqlDao implements AuthDao {
                 preparedStatement.setString(1, token);
                 try (var rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {
-                        return new AuthData(rs.getString("username"), token);
+                        return new AuthData(token, rs.getString("username"));
                     }
                 }
             }
