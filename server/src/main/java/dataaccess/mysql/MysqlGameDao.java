@@ -6,6 +6,7 @@ import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.GameDao;
 import model.GameData;
+import service.exceptions.BadRequestException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -122,18 +123,19 @@ public class MysqlGameDao extends MysqlDao implements GameDao {
         }
     }
 
-    public void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException {
+    public void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException, BadRequestException {
         String statement;
 
         if(color == ChessGame.TeamColor.BLACK){
             statement = "UPDATE `game` SET blackUsername=? WHERE gameId=?";
-        } else{
+        } else if (color == ChessGame.TeamColor.WHITE){
             statement = "UPDATE `game` SET whiteUsername=? WHERE gameId=?";
+        } else{
+            throw new BadRequestException("color options are BLACK or WHITE");
         }
 
         try (var conn = DatabaseManager.getConnection();
         var preparedStatement = conn.prepareStatement(statement)) {
-            System.out.println(username);
             preparedStatement.setString(1, username);
             preparedStatement.setInt(2, gameId);
 

@@ -2,6 +2,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import model.GameData;
+import service.exceptions.BadRequestException;
 
 import java.sql.SQLException;
 
@@ -45,6 +46,6 @@ public interface GameDao {
      * @param username
      * @param gameId
      */
-    void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException;
+    void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException, BadRequestException;
 }
 
