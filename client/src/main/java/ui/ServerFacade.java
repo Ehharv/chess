@@ -1,11 +1,12 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
 import com.google.gson.Gson;
-import model.AuthData;
 import model.GameData;
 import model.UserData;
+import model.returnobjects.GameId;
+import model.returnobjects.GameList;
+import model.returnobjects.JoinGameRequest;
+import model.returnobjects.AuthTokenResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,27 +23,34 @@ public class ServerFacade {
         this.serverUrl = serverUrl;
     }
 
-    public String register(UserData userData){
-        return null;
+    public AuthTokenResponse register(UserData userData) throws Exception {
+        var path = "/user";
+        return this.makeRequest("POST", path, userData, AuthTokenResponse.class);
     }
 
-    public String login(UserData userData){
-        return null;
+    public AuthTokenResponse login(UserData userData) throws Exception {
+        var path = "/session";
+        return this.makeRequest("POST", path, userData, AuthTokenResponse.class);
     }
 
-    public void logout(){
-
+    public void logout() throws Exception {
+        var path = "/session";
+        this.makeRequest("DELETE", path, null, null);
     }
 
-    public int createGame(GameData gameData){
-        return 97;
+    public GameId createGame(GameData gameData) throws Exception {
+        var path = "/game";
+        return this.makeRequest("POST", path, gameData, GameId.class);
     }
 
-    public GameData[] listGames(){
-        return null;
+    public GameList listGames() throws Exception {
+        var path = "/game";
+        return this.makeRequest("GET", path, null, GameList.class);
     }
 
-    public void joinGame(int gameId, ChessGame.TeamColor color){
+    public void joinGame(JoinGameRequest joinRequest) throws Exception {
+        var path = "/game";
+        this.makeRequest("PUT", path, joinRequest, null);
 
     }
 
