@@ -1,5 +1,10 @@
 package ui;
 
+import chess.ChessGame;
+import model.GameData;
+import model.returnobjects.GameId;
+import model.returnobjects.JoinGameRequest;
+
 import java.util.Arrays;
 
 public class PostloginUi {
@@ -35,7 +40,7 @@ public class PostloginUi {
 
             return switch (cmd){
                 case "create" -> create(params);
-                case "list" -> list(params);
+                case "list" -> list();
                 case "play" -> play(params);
                 case "observe" -> observe(params);
                 case "logout" -> logout(params);
@@ -47,21 +52,47 @@ public class PostloginUi {
         }
     }
 
-    private String create(String[] params) {
-        return null;
+    private String create(String[] params) throws Exception {
+        if(params.length != 1){
+            throw new Exception("Expected <game name>");
+        } else{
+            GameData game = new GameData(0, null, null, params[0], new ChessGame());
+            GameId id = server.createGame(game);
+            return "created game: " + id.toString();
+        }
     }
 
-    private String list(String[] params) {
+    private String list() throws Exception {
+        return server.listGames().toString();
     }
 
-    private String play(String[] params) {
-        return null;
+    private String play(String[] params) throws Exception {
+        if(params.length != 2){
+            throw new Exception("Expected <game ID> <BLACK/WHITE>");
+        } else {
+            int id = Integer.parseInt(params[0]);
+            ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
+            JoinGameRequest joinParams = new JoinGameRequest(id, color);
+            server.joinGame(joinParams);
+            state = State.INGAME;
+            return "Joined Game";
+        }
     }
 
-    private String observe(String[] params) {
-        return null;
+    private String observe(String[] params) throws Exception {
+        if(params.length != 1){
+            throw new Exception("Expected <game ID>");
+        } else {
+            int id = Integer.parseInt(params[0]);
+            // add functionality later
+            state = State.INGAME;
+            return "Watching game: (not implemented";
+        }
     }
 
-    private String logout(String[] params) {
+    private String logout(String[] params) throws Exception {
+        server.logout();
+        state = State.SIGNEDOUT;
+        return "Signed out";
     }
 }

@@ -51,7 +51,7 @@ public class PreloginUi {
             UserData user = new UserData(params[0], params[1], params[2]);
             AuthTokenResponse authToken = server.register(user);
             state = State.SIGNEDIN;
-            return authToken.toString();
+            return "registered!";
         }
     }
 
@@ -62,7 +62,7 @@ public class PreloginUi {
             UserData user = new UserData(params[0], params[1], null);
             AuthTokenResponse authToken = server.login(user);
             state = State.SIGNEDIN;
-            return authToken.toString();
+            return "logged in!";
         }
     }
 
