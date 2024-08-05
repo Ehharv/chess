@@ -1,6 +1,7 @@
 package ui;
 
 import com.google.gson.Gson;
+import model.AuthData;
 import model.GameData;
 import model.UserData;
 import model.returnobjects.GameId;
@@ -25,12 +26,17 @@ public class ServerFacade {
 
     public AuthTokenResponse register(UserData userData) throws Exception {
         var path = "/user";
-        return this.makeRequest("POST", path, userData, AuthTokenResponse.class);
+        AuthTokenResponse authToken = this.makeRequest("POST", path, userData, AuthTokenResponse.class);
+        UserContext.getInstance().setAuthToken(authToken.authToken());
+        return authToken;
     }
 
     public AuthTokenResponse login(UserData userData) throws Exception {
         var path = "/session";
-        return this.makeRequest("POST", path, userData, AuthTokenResponse.class);
+        AuthTokenResponse authToken = this.makeRequest("POST", path, userData, AuthTokenResponse.class);
+        UserContext.getInstance().setAuthToken(authToken.authToken());
+        return authToken;
+
     }
 
     public void logout() throws Exception {
@@ -73,6 +79,11 @@ public class ServerFacade {
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
         if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
+            // add authToken if required
+            String authToken = UserContext.getInstance().getAuthToken();
+            if (authToken != null) {
+                http.addRequestProperty("Authorization", authToken);
+            }
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
                 reqBody.write(reqData.getBytes());

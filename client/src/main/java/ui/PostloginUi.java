@@ -8,10 +8,9 @@ import model.returnobjects.JoinGameRequest;
 import java.util.Arrays;
 
 public class PostloginUi extends Ui{
-    private String serverUrl;
 
-    public PostloginUi(String serverUrl, State state) {
-        super(serverUrl, state);
+    public PostloginUi(String serverUrl, State state, UserContext userContext) {
+        super(serverUrl, state, userContext);
 
     }
 

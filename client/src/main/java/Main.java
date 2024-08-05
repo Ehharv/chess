@@ -16,7 +16,8 @@ public class Main {
         }
 
         new Repl(serverUrl).run();
-        Ui currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT);
+        UserContext userContext = UserContext.getInstance();
+        Ui currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
 
         System.out.print(currentUi.help());
 
@@ -32,8 +33,8 @@ public class Main {
 
                 // check if we need to change uis
                 switch (currentUi.getState()){
-                    case SIGNEDOUT -> currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT);
-                    case SIGNEDIN -> currentUi = new PostloginUi(serverUrl, State.SIGNEDIN);
+                    case SIGNEDOUT -> currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
+                    case SIGNEDIN -> currentUi = new PostloginUi(serverUrl, State.SIGNEDIN, userContext);
                 }
 
             } catch (Throwable e) {

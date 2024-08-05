@@ -4,12 +4,14 @@ public abstract class Ui {
     protected State state = State.SIGNEDOUT;
     protected String serverUrl;
     protected ServerFacade server;
-    protected String authToken;
+    protected UserContext userContext;
 
-    public Ui(String serverUrl, State state){
+    public Ui(String serverUrl, State state, UserContext userContext){
         this.state = state;
         this.serverUrl = serverUrl;
         this.server = new ServerFacade(serverUrl);
+        this.userContext = userContext;
+
     }
 
     public abstract String help();

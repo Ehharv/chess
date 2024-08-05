@@ -6,10 +6,9 @@ import model.returnobjects.AuthTokenResponse;
 import java.util.Arrays;
 
 public class PreloginUi extends Ui {
-    private String serverUrl;
 
-    public PreloginUi(String serverUrl, State state) {
-        super(serverUrl, state);
+    public PreloginUi(String serverUrl, State state, UserContext userContext) {
+        super(serverUrl, state, userContext);
     }
 
     public String help(){
