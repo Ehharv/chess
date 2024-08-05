@@ -37,7 +37,7 @@ public class PreloginUi {
                 case "register" -> register(params);
                 case "login" -> login(params);
                 case "quit" -> "quit";
-                default -> "help";
+                default -> help();
             };
         } catch (Exception e){
             return e.getMessage();

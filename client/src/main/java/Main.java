@@ -1,5 +1,8 @@
 import chess.*;
+import ui.PreloginUi;
 import ui.Repl;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,5 +17,29 @@ public class Main {
         }
 
         new Repl(serverUrl).run();
+        PreloginUi preloginUi = new PreloginUi(serverUrl);
+
+        System.out.print(preloginUi.help());
+
+        Scanner scanner = new Scanner(System.in);
+        var result = "";
+        while (!result.equals("quit")) {
+            printPrompt();
+            String line = scanner.nextLine();
+
+            try {
+                result = preloginUi.eval(line);
+                System.out.print(result);
+            } catch (Throwable e) {
+                var msg = e.toString();
+                System.out.print(msg);
+            }
+        }
+        System.out.println();
+
+    }
+
+    private static void printPrompt() {
+        System.out.print("\n" + ">>> ");
     }
 }
