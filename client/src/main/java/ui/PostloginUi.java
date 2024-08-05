@@ -86,7 +86,7 @@ public class PostloginUi extends Ui{
         } else {
             int id = Integer.parseInt(params[0]);
             ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
-            JoinGameRequest joinParams = new JoinGameRequest(id, color);
+            JoinGameRequest joinParams = new JoinGameRequest(color, id);
             server.joinGame(joinParams);
             setState(State.INGAME);
             return "Joined Game";
