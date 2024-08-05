@@ -77,13 +77,14 @@ public class ServerFacade {
     }
 
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
+        // add authToken if required
+        String authToken = UserContext.getInstance().getAuthToken();
+        if (authToken != null) {
+            http.addRequestProperty("Authorization", authToken);
+        }
         if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
-            // add authToken if required
-            String authToken = UserContext.getInstance().getAuthToken();
-            if (authToken != null) {
-                http.addRequestProperty("Authorization", authToken);
-            }
+
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
                 reqBody.write(reqData.getBytes());

@@ -1,8 +1,10 @@
 package ui;
 
 import chess.ChessGame;
+import com.google.gson.Gson;
 import model.GameData;
 import model.returnobjects.GameId;
+import model.returnobjects.GameList;
 import model.returnobjects.JoinGameRequest;
 
 import java.util.Arrays;
@@ -60,7 +62,22 @@ public class PostloginUi extends Ui{
     }
 
     private String list() throws Exception {
-        return server.listGames().toString();
+        GameList gameList = server.listGames();
+        StringBuilder formattedList = new StringBuilder();
+
+        for (GameData game : gameList.games()) {
+            formattedList.append("Game: ")
+                    .append(game.gameID())
+                    .append(" ")
+                    .append(game.gameName())
+                    .append(" - White: ")
+                    .append(game.whiteUsername())
+                    .append(", Black: ")
+                    .append(game.blackUsername())
+                    .append("\n");
+        }
+
+        return formattedList.toString();
     }
 
     private String play(String[] params) throws Exception {
