@@ -5,14 +5,11 @@ import model.returnobjects.AuthTokenResponse;
 
 import java.util.Arrays;
 
-public class PreloginUi {
-    private State state = State.SIGNEDOUT;
-    private ServerFacade server;
+public class PreloginUi extends Ui {
     private String serverUrl;
 
-    public PreloginUi(String serverUrl) {
-        this.serverUrl = serverUrl;
-        server = new ServerFacade(serverUrl);
+    public PreloginUi(String serverUrl, State state) {
+        super(serverUrl, state);
     }
 
     public String help(){
@@ -50,7 +47,7 @@ public class PreloginUi {
         } else{
             UserData user = new UserData(params[0], params[1], params[2]);
             AuthTokenResponse authToken = server.register(user);
-            state = State.SIGNEDIN;
+            setState(State.SIGNEDIN);
             return "registered!";
         }
     }
@@ -61,7 +58,7 @@ public class PreloginUi {
         } else {
             UserData user = new UserData(params[0], params[1], null);
             AuthTokenResponse authToken = server.login(user);
-            state = State.SIGNEDIN;
+            setState(State.SIGNEDIN);
             return "logged in!";
         }
     }

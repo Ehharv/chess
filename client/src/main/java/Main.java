@@ -1,6 +1,5 @@
 import chess.*;
-import ui.PreloginUi;
-import ui.Repl;
+import ui.*;
 
 import java.util.Scanner;
 
@@ -17,9 +16,9 @@ public class Main {
         }
 
         new Repl(serverUrl).run();
-        PreloginUi preloginUi = new PreloginUi(serverUrl);
+        Ui currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT);
 
-        System.out.print(preloginUi.help());
+        System.out.print(currentUi.help());
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
@@ -28,8 +27,15 @@ public class Main {
             String line = scanner.nextLine();
 
             try {
-                result = preloginUi.eval(line);
+                result = currentUi.eval(line);
                 System.out.print(result);
+
+                // check if we need to change uis
+                switch (currentUi.getState()){
+                    case SIGNEDOUT -> currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT);
+                    case SIGNEDIN -> currentUi = new PostloginUi(serverUrl, State.SIGNEDIN);
+                }
+
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);

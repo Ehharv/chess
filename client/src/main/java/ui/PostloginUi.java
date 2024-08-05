@@ -7,14 +7,12 @@ import model.returnobjects.JoinGameRequest;
 
 import java.util.Arrays;
 
-public class PostloginUi {
-    private State state = State.SIGNEDIN;
-    private ServerFacade server;
+public class PostloginUi extends Ui{
     private String serverUrl;
 
-    public PostloginUi(String serverUrl) {
-        this.serverUrl = serverUrl;
-        server = new ServerFacade(serverUrl);
+    public PostloginUi(String serverUrl, State state) {
+        super(serverUrl, state);
+
     }
 
     public String help(){
@@ -45,7 +43,7 @@ public class PostloginUi {
                 case "observe" -> observe(params);
                 case "logout" -> logout(params);
                 case "quit" -> "quit";
-                default -> "help";
+                default -> help();
             };
         } catch (Exception e){
             return e.getMessage();
@@ -74,7 +72,7 @@ public class PostloginUi {
             ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
             JoinGameRequest joinParams = new JoinGameRequest(id, color);
             server.joinGame(joinParams);
-            state = State.INGAME;
+            setState(State.INGAME);
             return "Joined Game";
         }
     }
@@ -85,14 +83,14 @@ public class PostloginUi {
         } else {
             int id = Integer.parseInt(params[0]);
             // add functionality later
-            state = State.INGAME;
+            setState(State.INGAME);
             return "Watching game: (not implemented";
         }
     }
 
     private String logout(String[] params) throws Exception {
         server.logout();
-        state = State.SIGNEDOUT;
+        setState(State.SIGNEDOUT);
         return "Signed out";
     }
 }

@@ -101,7 +101,7 @@ public class ServerFacade {
     }
 
     private boolean isSuccessful(int status) {
-        return status == 200;
+        return status >= 200 && status < 300;
     }
 
 }
