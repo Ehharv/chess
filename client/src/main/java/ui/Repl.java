@@ -1,5 +1,7 @@
 package ui;
 
+import chess.ChessGame;
+
 import java.util.Scanner;
 
 public class Repl {
@@ -15,6 +17,12 @@ public class Repl {
 
     public void run() {
         System.out.println("Welcome to Chess. Type 'help' for a list of commands.");
+
+        // print board
+        PrintBoard printer = new PrintBoard();
+        printer.print(new ChessGame(), ChessGame.TeamColor.WHITE);
+        printer.print(new ChessGame(), ChessGame.TeamColor.BLACK);
+
         UserContext userContext = UserContext.getInstance();
         Ui currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
 

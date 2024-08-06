@@ -101,6 +101,13 @@ public class PostloginUi extends Ui{
             int id = Integer.parseInt(params[0]);
             // add functionality later
             setState(State.INGAME);
+
+            // print board
+            PrintBoard printer = new PrintBoard();
+            printer.print(new ChessGame(), ChessGame.TeamColor.WHITE);
+            printer.print(new ChessGame(), ChessGame.TeamColor.BLACK);
+
+
             return "Watching game: (not implemented)";
         }
     }
