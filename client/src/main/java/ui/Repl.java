@@ -21,6 +21,7 @@ public class Repl {
 
         UserContext userContext = UserContext.getInstance();
         Ui currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
+        boolean firstTimeLogin = true;
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
@@ -39,7 +40,13 @@ public class Repl {
                 // check if we need to change uis
                 switch (currentUi.getState()){
                     case SIGNEDOUT -> currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
-                    case SIGNEDIN -> currentUi = new PostloginUi(serverUrl, State.SIGNEDIN, userContext);
+                    case SIGNEDIN -> {
+                        currentUi = new PostloginUi(serverUrl, State.SIGNEDIN, userContext);
+                        if(firstTimeLogin){
+                            serverFacade.fillMap();
+                            firstTimeLogin = false;
+                        }
+                    }
                 }
 
             } catch (Throwable e) {

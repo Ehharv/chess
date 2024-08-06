@@ -15,7 +15,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.security.spec.ECField;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +46,15 @@ public class ServerFacade {
             throw new RuntimeException("invalid game number");
         }
         return gameId;
+    }
+
+    public void fillMap() throws Exception {
+        // instantiate map when you login
+        GameList games = listGames();
+        for(GameData game : games.games()){
+            gameNumId.put(nextGameNum, game.gameID()); // put in map
+            nextGameNum++;
+        }
     }
 
     public AuthTokenResponse register(UserData userData) throws Exception {
