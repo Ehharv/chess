@@ -7,6 +7,8 @@ import org.junit.jupiter.api.*;
 import server.Server;
 import ui.ServerFacade;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -18,8 +20,7 @@ public class ServerFacadeTests {
     private static final String password = "password";
     private static final String email = "email.com";
     private String authToken;
-    private static final UserData user = new UserData(username, password, email);
-
+    UserData user;
 
     @BeforeAll
     public static void init() throws Exception {
@@ -27,12 +28,15 @@ public class ServerFacadeTests {
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
         serverFacade = new ServerFacade("http://localhost:" + port);
-        serverFacade.register(user);
+
+
     }
 
     @BeforeEach
     public void loginUser() throws Exception {
-        authToken = serverFacade.login(user).authToken();
+        String newUsername = username + new Random().nextInt();;
+        UserData user = new UserData(newUsername, password, email);
+        authToken = serverFacade.register(user).authToken();
     }
 
     @AfterAll
@@ -43,13 +47,15 @@ public class ServerFacadeTests {
 
     @Test
     public void registerValid() throws Exception {
-        UserData newUser = new UserData("username2", password, email);
+        String newUsername = username + new Random().nextInt();;
+        UserData newUser = new UserData(newUsername, password, email);
         AuthTokenResponse authToken2 = serverFacade.register(newUser); // register unique user
         assertNotNull(authToken2);
     }
 
     @Test
     public void registerInvalid() {
+        assertThrows(Exception.class, () -> serverFacade.register(user)); // register the same user
 
     }
 
