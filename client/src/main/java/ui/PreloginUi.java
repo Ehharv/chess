@@ -13,6 +13,7 @@ public class PreloginUi extends Ui {
 
     public String help(){
         return """
+        Available commands:
         register <username> <password> <email> (to create a new account)
         login <username> <password> (to an existing account)
         quit (to exit)
@@ -32,7 +33,7 @@ public class PreloginUi extends Ui {
             return switch (cmd){
                 case "register" -> register(params);
                 case "login" -> login(params);
-                case "quit" -> "quit";
+                case "quit" -> "exiting...";
                 default -> help();
             };
         } catch (Exception e){

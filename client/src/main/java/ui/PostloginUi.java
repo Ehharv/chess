@@ -18,6 +18,7 @@ public class PostloginUi extends Ui{
 
     public String help(){
         return """
+        Available commands:
         create <game name> (to create a new game)
         list (to see all games on the server)
         play <game ID> <BLACK/WHITE> (to join a game as the selected color)
@@ -43,7 +44,7 @@ public class PostloginUi extends Ui{
                 case "play" -> play(params);
                 case "observe" -> observe(params);
                 case "logout" -> logout(params);
-                case "quit" -> "quit";
+                case "quit" -> "exiting...";
                 default -> help();
             };
         } catch (Exception e){
@@ -100,7 +101,7 @@ public class PostloginUi extends Ui{
             int id = Integer.parseInt(params[0]);
             // add functionality later
             setState(State.INGAME);
-            return "Watching game: (not implemented";
+            return "Watching game: (not implemented)";
         }
     }
 

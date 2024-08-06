@@ -15,7 +15,41 @@ public class Repl {
 
     public void run() {
         System.out.println("Welcome to Chess. Type 'help' for a list of commands.");
+        UserContext userContext = UserContext.getInstance();
+        Ui currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
+
+        Scanner scanner = new Scanner(System.in);
+        var result = "";
+        while (!result.equals("quit")) {
+            printPrompt();
+            String line = scanner.nextLine();
+
+            try {
+
+                result = currentUi.eval(line);
+                System.out.print(result);
+
+                if(line.equals("quit")) {
+                    break;
+                }
+                // check if we need to change uis
+                switch (currentUi.getState()){
+                    case SIGNEDOUT -> currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
+                    case SIGNEDIN -> currentUi = new PostloginUi(serverUrl, State.SIGNEDIN, userContext);
+                }
+
+            } catch (Throwable e) {
+                var msg = e.toString();
+                System.out.print(msg);
+            }
+        }
+        System.out.println();
 
     }
+
+    private static void printPrompt() {
+        System.out.print("\n" + ">>> ");
+    }
+
 
 }
