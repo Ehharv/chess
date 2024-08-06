@@ -1,4 +1,4 @@
-package ui;
+package ServerData;
 
 import com.google.gson.Gson;
 import model.GameData;

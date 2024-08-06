@@ -9,7 +9,7 @@ import model.returnobjects.GameList;
 import model.returnobjects.JoinGameRequest;
 import org.junit.jupiter.api.*;
 import server.Server;
-import ui.ServerFacade;
+import ServerData.ServerFacade;
 
 import java.util.Random;
 
@@ -21,8 +21,8 @@ public class ServerFacadeTests {
     private static Server server;
     private static ServerFacade serverFacade;
     private static String username = "username";
-    private static final String password = "password";
-    private static final String email = "email.com";
+    private static final String PASSWORD = "password";
+    private static final String EMAIL = "email.com";
     private String authToken;
     UserData user;
 
@@ -37,7 +37,7 @@ public class ServerFacadeTests {
     @BeforeEach
     public void registerUser() throws Exception {
         String newUsername = username + new Random().nextInt(); // make a new user each time we run tests
-        user = new UserData(newUsername, password, email);
+        user = new UserData(newUsername, PASSWORD, EMAIL);
         authToken = serverFacade.register(user).authToken();
     }
 
@@ -50,7 +50,7 @@ public class ServerFacadeTests {
     @Test
     public void registerValid() throws Exception {
         String newUsername = username + new Random().nextInt();;
-        UserData newUser = new UserData(newUsername, password, email);
+        UserData newUser = new UserData(newUsername, PASSWORD, EMAIL);
         AuthTokenResponse authToken2 = serverFacade.register(newUser); // register unique user
         assertNotNull(authToken2);
     }
@@ -69,7 +69,7 @@ public class ServerFacadeTests {
 
     @Test
     public void loginInvalid() {
-        UserData fakeUser = new UserData("FakeUser", password, email);
+        UserData fakeUser = new UserData("FakeUser", PASSWORD, EMAIL);
         assertThrows(Exception.class, () -> serverFacade.login(fakeUser)); // can't login a user that hasn't been made
     }
 
@@ -99,7 +99,8 @@ public class ServerFacadeTests {
 
     @Test
     public void createGameInvalid() {
-        assertThrows(Exception.class, () -> serverFacade.createGame(null)); // null game
+        GameData gameData = new GameData(42, null, null, null, null);
+        assertThrows(Exception.class, () -> serverFacade.createGame(gameData)); // null stuff
     }
 
     @Test

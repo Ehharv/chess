@@ -7,40 +7,41 @@ import chess.ChessPosition;
 import static ui.EscapeSequences.*;
 
 public class PrintBoard {
-    private static final String[] headerForward = {"a", "b", "c", "d", "e", "f", "g", "h"};
-    private static final String[] headerBackward = {"h", "g", "f", "e", "d", "c", "b", "a"};
+    private static final String[] HEADER_FORWARD = {"a", "b", "c", "d", "e", "f", "g", "h"};
+    private static final String[] HEADER_BACKWARD = {"h", "g", "f", "e", "d", "c", "b", "a"};
 
     public static void print(ChessGame game, ChessGame.TeamColor perspective) {
         StringBuilder sb = new StringBuilder();
         if (perspective == ChessGame.TeamColor.WHITE) {
-            sb.append(makeLettering(headerForward));
+            sb.append(makeLettering(HEADER_FORWARD));
             for (int row = 8; row >= 1; row--) {
                 sb.append(" ").append(row).append(" ");
                 for (int col = 1; col <= 8; col++) {
-                    ChessPosition position = new ChessPosition(row, col);
-                    ChessPiece piece = game.getBoard().getPiece(position);
-                    boolean isLightSquare = (row + col) % 2 == 1;
-                    sb.append(getColoredSquare(piece, isLightSquare));
+                    colorSquares(game, row, col, sb);
                 }
                 sb.append(RESET_BG_COLOR).append(" ").append(row).append("\n");
             }
-            sb.append(makeLettering(headerForward));
+            sb.append(makeLettering(HEADER_FORWARD));
         } else {
-            sb.append(makeLettering(headerBackward));
+            sb.append(makeLettering(HEADER_BACKWARD));
             for (int row = 1; row <= 8; row++) {
                 sb.append(" ").append(row).append(" ");
                 for (int col = 8; col >= 1; col--) {
-                    ChessPosition position = new ChessPosition(row, col);
-                    ChessPiece piece = game.getBoard().getPiece(position);
-                    boolean isLightSquare = (row + col) % 2 == 1;
-                    sb.append(getColoredSquare(piece, isLightSquare));
+                    colorSquares(game, row, col, sb);
                 }
                 sb.append(RESET_BG_COLOR).append(" ").append(row).append("\n");
             }
-            sb.append(makeLettering(headerBackward));
+            sb.append(makeLettering(HEADER_BACKWARD));
         }
         sb.append("\n");
-        System.out.print(sb.toString());
+        System.out.print(sb);
+    }
+
+    private static void colorSquares(ChessGame game, int row, int col, StringBuilder sb) {
+        ChessPosition position = new ChessPosition(row, col);
+        ChessPiece piece = game.getBoard().getPiece(position);
+        boolean isLightSquare = (row + col) % 2 == 1;
+        sb.append(getColoredSquare(piece, isLightSquare));
     }
 
     private static String makeLettering(String[] letters) {

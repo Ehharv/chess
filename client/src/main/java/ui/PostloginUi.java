@@ -1,7 +1,7 @@
 package ui;
 
+import ServerData.UserContext;
 import chess.ChessGame;
-import com.google.gson.Gson;
 import model.GameData;
 import model.returnobjects.GameId;
 import model.returnobjects.GameList;
@@ -90,6 +90,12 @@ public class PostloginUi extends Ui{
             JoinGameRequest joinParams = new JoinGameRequest(color, id);
             server.joinGame(joinParams);
             setState(State.INGAME);
+
+            // print board
+            PrintBoard printer = new PrintBoard();
+            printer.print(new ChessGame(), ChessGame.TeamColor.WHITE);
+            printer.print(new ChessGame(), ChessGame.TeamColor.BLACK);
+
             return "Joined Game";
         }
     }

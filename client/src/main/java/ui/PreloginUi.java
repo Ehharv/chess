@@ -1,5 +1,6 @@
 package ui;
 
+import ServerData.UserContext;
 import model.UserData;
 import model.returnobjects.AuthTokenResponse;
 
