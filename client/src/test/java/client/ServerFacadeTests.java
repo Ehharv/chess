@@ -1,8 +1,12 @@
 package client;
 
-import model.AuthData;
+import chess.ChessGame;
+import model.GameData;
 import model.UserData;
 import model.returnobjects.AuthTokenResponse;
+import model.returnobjects.GameId;
+import model.returnobjects.GameList;
+import model.returnobjects.JoinGameRequest;
 import org.junit.jupiter.api.*;
 import server.Server;
 import ui.ServerFacade;
@@ -28,14 +32,12 @@ public class ServerFacadeTests {
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
         serverFacade = new ServerFacade("http://localhost:" + port);
-
-
     }
 
     @BeforeEach
-    public void loginUser() throws Exception {
-        String newUsername = username + new Random().nextInt();;
-        UserData user = new UserData(newUsername, password, email);
+    public void registerUser() throws Exception {
+        String newUsername = username + new Random().nextInt(); // make a new user each time we run tests
+        user = new UserData(newUsername, password, email);
         authToken = serverFacade.register(user).authToken();
     }
 
@@ -56,38 +58,86 @@ public class ServerFacadeTests {
     @Test
     public void registerInvalid() {
         assertThrows(Exception.class, () -> serverFacade.register(user)); // register the same user
+    }
+
+    @Test
+    public void loginValid() throws Exception {
+        AuthTokenResponse auth = serverFacade.login(user);
+        assertNotNull(auth);
+        assertNotEquals(authToken, auth.authToken()); // always get a new auth token
+    }
+
+    @Test
+    public void loginInvalid() {
+        UserData fakeUser = new UserData("FakeUser", password, email);
+        assertThrows(Exception.class, () -> serverFacade.login(fakeUser)); // can't login a user that hasn't been made
+    }
+
+    @Test
+    public void logoutValid() throws Exception {
+        serverFacade.logout();
+        assertThrows(Exception.class, () -> serverFacade.listGames()); // can't list games
+        // can't make a game
+        assertThrows(Exception.class, () -> serverFacade.createGame(new GameData(1, null, null, "nullGame", new ChessGame())));
 
     }
 
     @Test
-    public void loginValid() {}
+    public void logoutInvalid() throws Exception {
+        serverFacade.logout();
+        assertThrows(Exception.class, () -> serverFacade.logout()); // can't logout again
+
+    }
 
     @Test
-    public void loginInvalid() {}
+    public void createGameValid() throws Exception {
+        GameData gameData = new GameData(42, null, null, "newGame!", new ChessGame());
+        // good values for all necesary fields of new game
+        GameId gameId = serverFacade.createGame(gameData);
+        assertNotNull(gameId);
+    }
 
     @Test
-    public void logoutValid() {}
+    public void createGameInvalid() {
+        assertThrows(Exception.class, () -> serverFacade.createGame(null)); // null game
+    }
 
     @Test
-    public void logoutInvalid() {}
+    public void listGamesValid() throws Exception {
+        GameData gameData = new GameData(42, null, null, "newGame!", new ChessGame());
+        serverFacade.createGame(gameData); // add a game
+
+        GameList games = serverFacade.listGames();
+        assertNotNull(games);
+        assertNotEquals(0, games.games().length); // should have at least one game
+
+    }
 
     @Test
-    public void createGameValid() {}
+    public void listGamesInvalid() throws Exception {
+        serverFacade.logout();
+        assertThrows(Exception.class, () -> serverFacade.listGames()); // can't list games without being logged in
+    }
 
     @Test
-    public void createGameInvalid() {}
+    public void joinGameValid() throws Exception {
+        GameData gameData = new GameData(42, null, null, "newGame!", new ChessGame());
+        int id = serverFacade.createGame(gameData).gameID(); // add a game
+
+        JoinGameRequest req = new JoinGameRequest(ChessGame.TeamColor.WHITE, id);
+        assertDoesNotThrow(() -> serverFacade.joinGame(req)); // successfully join a new game
+    }
 
     @Test
-    public void listGamesValid() {}
+    public void joinGameInvalid() throws Exception {
+        GameData gameData = new GameData(42, null, null, "newGame!", new ChessGame());
+        int id = serverFacade.createGame(gameData).gameID(); // add a game
 
-    @Test
-    public void listGamesInvalid() {}
+        JoinGameRequest req = new JoinGameRequest(ChessGame.TeamColor.WHITE, id);
+        serverFacade.joinGame(req); // successfully join a new game
 
-    @Test
-    public void joinGameValid() {}
-
-    @Test
-    public void joinGameInvalid() {}
+        assertThrows(Exception.class, () -> serverFacade.joinGame(req)); // try joining again as the same color
+    }
 
 
 
