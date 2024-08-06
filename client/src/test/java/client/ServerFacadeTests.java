@@ -9,7 +9,7 @@ import model.returnobjects.GameList;
 import model.returnobjects.JoinGameRequest;
 import org.junit.jupiter.api.*;
 import server.Server;
-import ServerData.ServerFacade;
+import serverdata.ServerFacade;
 
 import java.util.Random;
 

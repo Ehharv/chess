@@ -1,7 +1,7 @@
 package ui;
 
-import ServerData.ServerFacade;
-import ServerData.UserContext;
+import serverdata.ServerFacade;
+import serverdata.UserContext;
 
 public abstract class Ui {
     protected State state = State.SIGNEDOUT;

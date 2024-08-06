@@ -1,6 +1,6 @@
 package ui;
 
-import ServerData.UserContext;
+import serverdata.UserContext;
 import chess.ChessGame;
 import model.GameData;
 import model.returnobjects.GameId;

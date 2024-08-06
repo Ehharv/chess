@@ -1,4 +1,4 @@
-package ServerData;
+package serverdata;
 
 public class UserContext {
     private static UserContext instance;

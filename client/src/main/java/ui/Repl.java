@@ -1,7 +1,7 @@
 package ui;
 
-import ServerData.ServerFacade;
-import ServerData.UserContext;
+import serverdata.ServerFacade;
+import serverdata.UserContext;
 
 import java.util.Scanner;
 
