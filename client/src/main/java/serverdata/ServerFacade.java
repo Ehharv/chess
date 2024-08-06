@@ -15,12 +15,38 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.security.spec.ECField;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerFacade {
     private String serverUrl;
+    private static Map<Integer, Integer> gameNumId = new HashMap<>();
+    public static int nextGameNum = 1;
 
     public ServerFacade(String serverUrl) {
         this.serverUrl = serverUrl;
+    }
+
+    public int getGameId(int gameNum){
+        try {
+            return gameNumId.get(gameNum);
+        } catch(Exception e) {
+            throw new RuntimeException("invalid game number");
+        }
+    }
+
+    public int getGameNum(int gameId) {
+        try {
+            for (Map.Entry<Integer, Integer> entry : gameNumId.entrySet()) {
+                if (entry.getValue() == gameId) {
+                    return entry.getKey();
+                }
+            }
+        } catch(Exception e) {
+            throw new RuntimeException("invalid game number");
+        }
+        return gameId;
     }
 
     public AuthTokenResponse register(UserData userData) throws Exception {
@@ -45,7 +71,10 @@ public class ServerFacade {
 
     public GameId createGame(GameData gameData) throws Exception {
         var path = "/game";
-        return this.makeRequest("POST", path, gameData, GameId.class);
+        GameId gameId = this.makeRequest("POST", path, gameData, GameId.class);
+        gameNumId.put(nextGameNum, gameId.gameID()); // put in map
+        nextGameNum++;
+        return gameId;
     }
 
     public GameList listGames() throws Exception {

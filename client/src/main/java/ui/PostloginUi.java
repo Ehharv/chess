@@ -57,8 +57,8 @@ public class PostloginUi extends Ui{
             throw new Exception("Expected <game name>");
         } else{
             GameData game = new GameData(0, null, null, params[0], new ChessGame());
-            GameId id = server.createGame(game);
-            return "created game: " + id.toString();
+            server.createGame(game);
+            return "created game " + (server.nextGameNum - 1) + ": " + params[0];
         }
     }
 
@@ -67,8 +67,9 @@ public class PostloginUi extends Ui{
         StringBuilder formattedList = new StringBuilder();
 
         for (GameData game : gameList.games()) {
+            int gameNum =  server.getGameNum(game.gameID());
             formattedList.append("Game: ")
-                    .append(game.gameID())
+                    .append(gameNum)
                     .append(" ")
                     .append(game.gameName())
                     .append(" - White: ")
@@ -79,13 +80,15 @@ public class PostloginUi extends Ui{
         }
 
         return formattedList.toString();
+
     }
 
     private String play(String[] params) throws Exception {
         if(params.length != 2){
             throw new Exception("Expected <game ID> <BLACK/WHITE>");
         } else {
-            int id = Integer.parseInt(params[0]);
+            int gameNum = Integer.parseInt(params[0]);
+            int id = server.getGameId(gameNum);
             ChessGame.TeamColor color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
             JoinGameRequest joinParams = new JoinGameRequest(color, id);
             server.joinGame(joinParams);
@@ -104,7 +107,8 @@ public class PostloginUi extends Ui{
         if(params.length != 1){
             throw new Exception("Expected <game ID>");
         } else {
-            int id = Integer.parseInt(params[0]);
+            int gameNum = Integer.parseInt(params[0]);
+            int id = server.getGameId(gameNum);
             // add functionality later
             setState(State.INGAME);
 
