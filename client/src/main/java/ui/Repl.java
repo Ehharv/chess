@@ -42,10 +42,9 @@ public class Repl {
                     case SIGNEDOUT -> currentUi = new PreloginUi(serverUrl, State.SIGNEDOUT, userContext);
                     case SIGNEDIN -> {
                         currentUi = new PostloginUi(serverUrl, State.SIGNEDIN, userContext);
-                        if(firstTimeLogin){
-                            serverFacade.fillMap();
-                            firstTimeLogin = false;
-                        }
+                        fillMap(firstTimeLogin);
+                        firstTimeLogin = false;
+
                     }
                 }
 
@@ -60,6 +59,12 @@ public class Repl {
 
     private static void printPrompt() {
         System.out.print("\n" + ">>> ");
+    }
+
+    private void fillMap(boolean firstTimeLogin) throws Exception {
+        if(firstTimeLogin){
+            serverFacade.fillMap();
+        }
     }
 
 
