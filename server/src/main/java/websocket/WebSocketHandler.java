@@ -15,7 +15,9 @@ import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
 import javax.management.Notification;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebSocket
 public class WebSocketHandler {
@@ -37,7 +39,7 @@ public class WebSocketHandler {
     public void onError(Throwable error) {}
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws DataAccessException {
+    public void onMessage(Session session, String message) throws DataAccessException, IOException {
         // determine message type
         UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
         UserGameCommand.CommandType commandType = command.getCommandType();
@@ -55,10 +57,10 @@ public class WebSocketHandler {
     }
 
     // call service and/or send message to clients
-    private void connect(String message, Session session, int gameId, String authToken) throws DataAccessException {
+    private void connect(String message, Session session, int gameId, String authToken) throws DataAccessException, IOException {
         sessions.addSessionToGame(gameId, session);
         ServerMessage.ServerMessageType loadGame = ServerMessage.ServerMessageType.LOAD_GAME;
-        sendMessage(gson.toJson(loadGame), session);
+        sessions.sendMessage(gson.toJson(loadGame), session);
 
         GameData game = gameDao.getGame(gameId);
         String username = authDao.getAuthByToken(authToken).username();
@@ -72,7 +74,7 @@ public class WebSocketHandler {
             broadcast = username + "is observing";
         }
 
-        broadcastMessage(gameId, gson.toJson(broadcast), session);
+        sessions.broadcastMessage(gameId, gson.toJson(broadcast), session);
 
     }
 
@@ -85,10 +87,5 @@ public class WebSocketHandler {
     // broadcastMessage(...)
     private void resignGame(String message){}
 
-    // send a message
-    private void sendMessage(String message, Session session){}
-
-    // broadcast to all but specified
-    private void broadcastMessage(int gameId, String message, Session exceptThisSession){}
 
 }
