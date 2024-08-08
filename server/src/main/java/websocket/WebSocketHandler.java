@@ -5,6 +5,7 @@ import org.eclipse.jetty.websocket.api.annotations.*;
 
 @WebSocket
 public class WebSocketHandler {
+    private final WebSocketSessions sessions = new WebSocketSessions();
 
     @OnWebSocketConnect
     public void onConnect(Session session) {}
