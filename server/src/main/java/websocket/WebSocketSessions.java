@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketSessions {
     public final ConcurrentHashMap<GameId, Set<Session>> sessionMap = new ConcurrentHashMap<>();
 
-    public void addSessionToGame(GameId gameId, Session session) {}
+    public void addSessionToGame(int gameId, Session session) {}
 
     public void removeSessionFromGame(GameId gameId, Session session) {
     }
