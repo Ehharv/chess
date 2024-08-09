@@ -1,5 +1,8 @@
 package websocket;
 
+import chess.ChessGame;
+import chess.ChessMove;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
@@ -39,7 +42,7 @@ public class WebSocketHandler {
     public void onError(Throwable error) {}
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws DataAccessException, IOException, BadRequestException {
+    public void onMessage(Session session, String message) throws DataAccessException, IOException, BadRequestException, InvalidMoveException {
         // determine message type
         UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
         UserGameCommand.CommandType commandType = command.getCommandType();
@@ -48,13 +51,14 @@ public class WebSocketHandler {
         GameData game = gameDao.getGame(gameId);
         String authToken = command.getAuthToken();
         String username = authDao.getAuthByToken(authToken).username();
+        ChessMove move = command.getMove();
 
         // call a method to process
         switch (commandType) {
             case LEAVE -> leaveGame(message, session, game, username);
             case RESIGN -> resignGame(message, game, username);
             case CONNECT -> connect(message, session, gameId, authToken);
-            case MAKE_MOVE -> makeMove(message);
+            case MAKE_MOVE -> makeMove(session, message, game, move);
         }
     }
 
@@ -79,7 +83,15 @@ public class WebSocketHandler {
 
     }
 
-    private void makeMove(String message){}
+    private void makeMove(Session session, String message, GameData gameData, ChessMove move) throws DataAccessException, IOException, InvalidMoveException {
+        ChessGame game = gameData.game();
+        try {
+            game.makeMove(move);
+        } catch(InvalidMoveException e) {
+            sessions.notify(session, gson.toJson(e.toString());
+        }
+
+    }
 
     private void leaveGame(String message, Session session, GameData game, String username) throws DataAccessException, BadRequestException, IOException {
         if(game.blackUsername().equals(username)) {
