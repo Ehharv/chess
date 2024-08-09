@@ -5,13 +5,19 @@ import org.eclipse.jetty.websocket.api.Session;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketSessions {
     public final ConcurrentHashMap<Integer, Set<Session>> sessionMap = new ConcurrentHashMap<>();
 
-    public void addSessionToGame(int gameId, Session session) {}
+    public void addSessionToGame(int gameId, Session session) {
+        if(! sessionMap.containsKey(gameId)) {
+            sessionMap.put(gameId, new HashSet<>());
+            sessionMap.get(gameId).add(session);
+        }
+    }
 
     public void removeSessionFromGame(GameId gameId, Session session) {
     }
