@@ -47,5 +47,8 @@ public interface GameDao {
      * @param gameId
      */
     void joinGame(ChessGame.TeamColor color, String username, int gameId) throws DataAccessException, BadRequestException;
+
+    void updateGame(GameData game) throws DataAccessException, BadRequestException;
+
 }
 

@@ -11,6 +11,7 @@ import model.GameData;
 import model.returnobjects.GameId;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
+import service.exceptions.BadRequestException;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
@@ -39,17 +40,19 @@ public class WebSocketHandler {
     public void onError(Throwable error) {}
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws DataAccessException, IOException {
+    public void onMessage(Session session, String message) throws DataAccessException, IOException, BadRequestException {
         // determine message type
         UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
         UserGameCommand.CommandType commandType = command.getCommandType();
         // get things to pass to methods
         int gameId = command.getGameID();
+        GameData game = gameDao.getGame(gameId);
         String authToken = command.getAuthToken();
+        String username = authDao.getAuthByToken(authToken).username();
 
         // call a method to process
         switch (commandType) {
-            case LEAVE -> leaveGame(message);
+            case LEAVE -> leaveGame(message, session, game, username);
             case RESIGN -> resignGame(message);
             case CONNECT -> connect(message, session, gameId, authToken);
             case MAKE_MOVE -> makeMove(message);
@@ -82,7 +85,19 @@ public class WebSocketHandler {
     private void makeMove(String message){}
 
     // sendMessage(...)
-    private void leaveGame(String message){}
+    private void leaveGame(String message, Session session, GameData game, String username) throws DataAccessException, BadRequestException, IOException {
+        if(game.blackUsername().equals(username)) {
+            game = new GameData(game.gameID(), game.whiteUsername(), null, game.gameName(), game.game());
+        } else if(game.whiteUsername().equals(username)) {
+            game = new GameData(game.gameID(), null, game.blackUsername(), game.gameName(), game.game());
+        }
+        gameDao.updateGame(game);
+        sessions.removeSessionFromGame(game.gameID(), session);
+
+        message = username + "has left";
+
+        sessions.broadcastMessage(game.gameID(), gson.toJson(message), session);
+    }
 
     // broadcastMessage(...)
     private void resignGame(String message){}

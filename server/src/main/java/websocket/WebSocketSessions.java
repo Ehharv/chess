@@ -19,7 +19,7 @@ public class WebSocketSessions {
         }
     }
 
-    public void removeSessionFromGame(GameId gameId, Session session) {
+    public void removeSessionFromGame(int gameId, Session session) {
     }
 
     public void removeSessions(Session session){}
