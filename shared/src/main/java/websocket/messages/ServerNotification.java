@@ -13,7 +13,15 @@ public class ServerNotification extends ServerMessage{
     }
 
     public ServerMessageType getMessageType(){
-        return ServerMessageType.NOTIFICATION;
+        return this.serverMessageType;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setMessageType(ServerMessageType type) {
+        this.serverMessageType = type;
     }
 
 

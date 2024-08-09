@@ -11,14 +11,15 @@ import dataaccess.mysql.MysqlAuthDao;
 import dataaccess.mysql.MysqlGameDao;
 import model.AuthData;
 import model.GameData;
-import model.returnobjects.GameId;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import service.exceptions.BadRequestException;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ServerError;
+import websocket.messages.ServerLoadGame;
 import websocket.messages.ServerMessage;
+import websocket.messages.ServerNotification;
 
-import javax.management.Notification;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -42,7 +43,8 @@ public class WebSocketHandler {
     public void onError(Throwable error) {}
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws DataAccessException, IOException, BadRequestException, InvalidMoveException {
+    public void onMessage(Session session, String message) throws DataAccessException,
+            IOException, BadRequestException, InvalidMoveException {
         // determine message type
         UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
         UserGameCommand.CommandType commandType = command.getCommandType();
@@ -63,13 +65,16 @@ public class WebSocketHandler {
     }
 
     // call service and send message to clients
-    private void connect(String message, Session session, int gameId, String authToken) throws DataAccessException, IOException {
+    private void connect(String message, Session session, int gameId, String authToken)
+            throws DataAccessException, IOException {
         sessions.addSessionToGame(gameId, session);
-        ServerMessage.ServerMessageType loadGame = ServerMessage.ServerMessageType.LOAD_GAME;
-        sessions.sendMessage(gson.toJson(loadGame), session);
+        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME);
+        sessions.sendMessage(gson.toJson(load), session);
 
         GameData game = gameDao.getGame(gameId);
         String username = authDao.getAuthByToken(authToken).username();
+
+        ServerNotification serverNotification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, null);
 
         if(username.equals(game.whiteUsername())) {
             message = username + "is playing as white";
@@ -78,8 +83,8 @@ public class WebSocketHandler {
         } else {
             message = username + "is observing";
         }
-
-        sessions.broadcastMessage(gameId, gson.toJson(message), session);
+        serverNotification.setMessage(message);
+        sessions.broadcastMessage(gameId, gson.toJson(serverNotification), session);
 
     }
 
@@ -88,7 +93,8 @@ public class WebSocketHandler {
         try {
             game.makeMove(move);
         } catch(InvalidMoveException e) {
-            sessions.notify(session, gson.toJson(e.toString());
+            ServerError error = new ServerError(ServerMessage.ServerMessageType.ERROR, e.getMessage());
+            sessions.sendMessage(gson.toJson(error), session);
         }
 
     }
@@ -104,7 +110,9 @@ public class WebSocketHandler {
 
         message = username + "has left";
 
-        sessions.broadcastMessage(game.gameID(), gson.toJson(message), session);
+        ServerNotification serverNotification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, message);
+
+        sessions.broadcastMessage(game.gameID(), gson.toJson(serverNotification), session);
     }
 
     private void resignGame(String message, GameData game, String username) throws BadRequestException, DataAccessException, IOException {
@@ -112,7 +120,9 @@ public class WebSocketHandler {
         gameDao.updateGame(game);
 
         message = username + "resigned";
-        sessions.broadcastMessage(game.gameID(), gson.toJson(message), null);
+        ServerNotification serverNotification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, message);
+
+        sessions.broadcastMessage(game.gameID(), gson.toJson(serverNotification), null);
     }
 
 
