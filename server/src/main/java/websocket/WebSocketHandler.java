@@ -53,13 +53,13 @@ public class WebSocketHandler {
         // call a method to process
         switch (commandType) {
             case LEAVE -> leaveGame(message, session, game, username);
-            case RESIGN -> resignGame(message);
+            case RESIGN -> resignGame(message, game, username);
             case CONNECT -> connect(message, session, gameId, authToken);
             case MAKE_MOVE -> makeMove(message);
         }
     }
 
-    // call service and/or send message to clients
+    // call service and send message to clients
     private void connect(String message, Session session, int gameId, String authToken) throws DataAccessException, IOException {
         sessions.addSessionToGame(gameId, session);
         ServerMessage.ServerMessageType loadGame = ServerMessage.ServerMessageType.LOAD_GAME;
@@ -67,24 +67,21 @@ public class WebSocketHandler {
 
         GameData game = gameDao.getGame(gameId);
         String username = authDao.getAuthByToken(authToken).username();
-        String broadcast;
 
         if(username.equals(game.whiteUsername())) {
-            broadcast = username + "is playing as white";
+            message = username + "is playing as white";
         } else if(username.equals(game.blackUsername())) {
-            broadcast = username + "is playing as black";
+            message = username + "is playing as black";
         } else {
-            broadcast = username + "is observing";
+            message = username + "is observing";
         }
 
-        sessions.broadcastMessage(gameId, gson.toJson(broadcast), session);
+        sessions.broadcastMessage(gameId, gson.toJson(message), session);
 
     }
 
-    // service.method(...)
     private void makeMove(String message){}
 
-    // sendMessage(...)
     private void leaveGame(String message, Session session, GameData game, String username) throws DataAccessException, BadRequestException, IOException {
         if(game.blackUsername().equals(username)) {
             game = new GameData(game.gameID(), game.whiteUsername(), null, game.gameName(), game.game());
@@ -99,8 +96,13 @@ public class WebSocketHandler {
         sessions.broadcastMessage(game.gameID(), gson.toJson(message), session);
     }
 
-    // broadcastMessage(...)
-    private void resignGame(String message){}
+    private void resignGame(String message, GameData game, String username) throws BadRequestException, DataAccessException, IOException {
+        game.game().setOver(true);
+        gameDao.updateGame(game);
+
+        message = username + "resigned";
+        sessions.broadcastMessage(game.gameID(), gson.toJson(message), null);
+    }
 
 
 }

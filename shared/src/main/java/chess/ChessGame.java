@@ -17,11 +17,20 @@ import static chess.ChessPiece.PieceType.KING;
 public class ChessGame {
     private ChessBoard board;
     private TeamColor teamTurn;
+    boolean over;
 
     public ChessGame() {
         this.board = new ChessBoard();
         this.board.resetBoard();
         this.teamTurn = WHITE; // white goes first
+    }
+
+    public boolean isOver(){
+        return over;
+    }
+
+    public void setOver(boolean over){
+        this.over = over;
     }
 
     public ChessGame(ChessGame game){
