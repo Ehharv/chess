@@ -60,7 +60,7 @@ public class WebSocketHandler {
             case LEAVE -> leaveGame(message, session, game, username);
             case RESIGN -> resignGame(message, game, username);
             case CONNECT -> connect(message, session, gameId, authToken);
-            case MAKE_MOVE -> makeMove(session, message, game, move);
+            case MAKE_MOVE -> makeMove(session, message, game, move, username);
         }
     }
 
@@ -68,13 +68,12 @@ public class WebSocketHandler {
     private void connect(String message, Session session, int gameId, String authToken)
             throws DataAccessException, IOException {
         sessions.addSessionToGame(gameId, session);
-        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME);
+        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME, gameId);
         sessions.sendMessage(gson.toJson(load), session);
 
         GameData game = gameDao.getGame(gameId);
         String username = authDao.getAuthByToken(authToken).username();
 
-        ServerNotification serverNotification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, null);
 
         if(username.equals(game.whiteUsername())) {
             message = username + "is playing as white";
@@ -83,18 +82,54 @@ public class WebSocketHandler {
         } else {
             message = username + "is observing";
         }
-        serverNotification.setMessage(message);
+        ServerNotification serverNotification = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION,
+                                                                        message);
         sessions.broadcastMessage(gameId, gson.toJson(serverNotification), session);
 
     }
 
-    private void makeMove(Session session, String message, GameData gameData, ChessMove move) throws DataAccessException, IOException, InvalidMoveException {
+    private void makeMove(Session session, String message, GameData gameData, ChessMove move, String username) throws IOException {
         ChessGame game = gameData.game();
+        // see if the move is ok to make
         try {
             game.makeMove(move);
         } catch(InvalidMoveException e) {
             ServerError error = new ServerError(ServerMessage.ServerMessageType.ERROR, e.getMessage());
             sessions.sendMessage(gson.toJson(error), session);
+        }
+
+        // update in database
+        try {
+            gameDao.updateGame(gameData);
+        } catch (DataAccessException | BadRequestException e){
+            ServerError error = new ServerError(ServerMessage.ServerMessageType.ERROR, e.getMessage());
+            sessions.sendMessage(gson.toJson(error), session);
+        }
+
+        // reload game board
+        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME, gameData.gameID());
+        sessions.broadcastMessage(gameData.gameID(), gson.toJson(load), null);
+
+        // notify players what move was made
+        String moveString = username + "'s move: " + gson.toJson(move);
+        ServerNotification moveMessage = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, moveString);
+        sessions.broadcastMessage(gameData.gameID(), gson.toJson(moveMessage), session);
+
+        // check game status
+        String endState =  null;
+        if(game.isInCheckmate(game.getTeamTurn())){
+            endState = "Checkmate";
+        } else if (game.isInCheck(game.getTeamTurn())){
+            endState = "Check";
+        } else if(game.isInStalemate(game.getTeamTurn())){
+            endState = "Stalemate";
+        }
+
+        // notify of end game status if applicable
+        if(endState != null) {
+            game.setOver(true);
+            ServerNotification endMessage = new ServerNotification(ServerMessage.ServerMessageType.NOTIFICATION, endState);
+            sessions.broadcastMessage(gameData.gameID(), gson.toJson(endMessage), null);
         }
 
     }
