@@ -93,13 +93,13 @@ public class PostloginUi extends Ui{
             JoinGameRequest joinParams = new JoinGameRequest(color, id);
             server.joinGame(joinParams);
             setState(State.INGAME);
+            userContext.setColor(color);
+//            // print board
+//            PrintBoard printer = new PrintBoard();
+//            printer.print(new ChessGame(), ChessGame.TeamColor.WHITE);
+//            printer.print(new ChessGame(), ChessGame.TeamColor.BLACK);
 
-            // print board
-            PrintBoard printer = new PrintBoard();
-            printer.print(new ChessGame(), ChessGame.TeamColor.WHITE);
-            printer.print(new ChessGame(), ChessGame.TeamColor.BLACK);
-
-            return "Joined Game";
+            return "Joined Game as " + color;
         }
     }
 

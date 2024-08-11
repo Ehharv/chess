@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessGame;
 import serverdata.UserContext;
 
 import java.util.Arrays;
@@ -48,7 +49,12 @@ public class GamePlayUi extends Ui{
     }
 
     private String redraw(){
-        return null;
+        ChessGame game = userContext.getGame();
+        if(game == null){
+            game = new ChessGame();
+        }
+        PrintBoard.print(game, userContext.getColor());
+        return "";
     }
 
     private String leave(){
