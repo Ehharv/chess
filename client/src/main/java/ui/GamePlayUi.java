@@ -50,7 +50,7 @@ public class GamePlayUi extends Ui{
 
     private String redraw(){
         ChessGame game = userContext.getGame();
-        if(game == null){
+        if(game == null){ // first time drawing
             game = new ChessGame();
         }
         PrintBoard.print(game, userContext.getColor());
@@ -58,8 +58,10 @@ public class GamePlayUi extends Ui{
     }
 
     private String leave(){
-        return null;
-
+        userContext.setGame(null);
+        userContext.setColor(null);
+        setState(State.SIGNEDIN);
+        return "";
     }
 
     private String move(String[] params){
