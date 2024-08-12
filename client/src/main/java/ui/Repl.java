@@ -47,6 +47,7 @@ public class Repl {
                         firstTimeLogin = false;
 
                     }
+                    case INGAME -> currentUi = new GamePlayUi(serverUrl, State.INGAME, userContext);
                 }
 
             } catch (Throwable e) {

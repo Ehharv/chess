@@ -2,6 +2,7 @@ package serverdata;
 
 import com.google.gson.Gson;
 import ui.Repl;
+import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 import websocket.messages.ServerNotification;
 
@@ -26,7 +27,6 @@ public class WebSocketFacade extends Endpoint implements MessageHandler.Whole<St
 
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
-
     }
 
     @Override
@@ -35,15 +35,49 @@ public class WebSocketFacade extends Endpoint implements MessageHandler.Whole<St
         gameHandler.notify(notification);
     }
 
-    public void connect(){}
+    public void connect() throws IOException {
+        UserGameCommand command = new UserGameCommand(
+                UserGameCommand.CommandType.CONNECT,
+                UserContext.getInstance().getAuthToken(),
+                UserContext.getInstance().getGame()
+        );
 
-    public void makeMove(){}
+        sendMessage(command);
+    }
 
-    public void leaveGame(){}
+    public void makeMove() throws IOException {
+        UserGameCommand command = new UserGameCommand(
+                UserGameCommand.CommandType.MAKE_MOVE,
+                UserContext.getInstance().getAuthToken(),
+                UserContext.getInstance().getGame()
+        );
 
-    public void resignGame(){}
+        sendMessage(command);
+    }
 
-    private void sendMessage(){}
+    public void leaveGame() throws IOException {
+        UserGameCommand command = new UserGameCommand(
+                UserGameCommand.CommandType.LEAVE,
+                UserContext.getInstance().getAuthToken(),
+                UserContext.getInstance().getGame()
+        );
+
+        sendMessage(command);
+    }
+
+    public void resignGame() throws IOException {
+        UserGameCommand command = new UserGameCommand(
+                UserGameCommand.CommandType.RESIGN,
+                UserContext.getInstance().getAuthToken(),
+                UserContext.getInstance().getGame()
+        );
+
+        sendMessage(command);
+    }
+
+    private void sendMessage(UserGameCommand command) throws IOException {
+        session.getBasicRemote().sendText(new Gson().toJson(command));
+    }
 
 
 }
