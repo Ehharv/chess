@@ -7,6 +7,7 @@ public class UserContext {
     private String authToken;
     private ChessGame game;
     private ChessGame.TeamColor color;
+    private int gameId;
 
     private UserContext() {}
 
@@ -39,5 +40,13 @@ public class UserContext {
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 }

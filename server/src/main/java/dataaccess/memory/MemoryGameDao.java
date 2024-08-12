@@ -1,8 +1,10 @@
 package dataaccess.memory;
 
 import chess.ChessGame;
+import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import model.GameData;
+import service.exceptions.BadRequestException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,6 +56,10 @@ public class MemoryGameDao implements GameDao {
         games.put(gameId, updatedGame); // replace the old game
     }
 
+    @Override
+    public void updateGame(GameData game) throws DataAccessException, BadRequestException {
+        games.put(game.gameID(), game);
+    }
 
 
     private int getNextAvailableId() {

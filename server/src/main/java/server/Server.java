@@ -20,12 +20,13 @@ import service.UserService;
 import service.exceptions.ErrorMessage;
 import spark.*;
 import service.ClearService;
+import websocket.WebSocketHandler;
 
 import java.sql.SQLException;
 
 public class Server {
 
-    public int run(int desiredPort) {
+    public int run(int desiredPort) throws SQLException, DataAccessException {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
@@ -41,6 +42,9 @@ public class Server {
         } catch (DataAccessException | SQLException e) {
             throw new RuntimeException(e);
         }
+
+        WebSocketHandler ws = new WebSocketHandler();
+        Spark.webSocket("/connect", ws);
 
         ClearService clearService = new ClearService(userDao, authDao, gameDao);
         UserService userService = new UserService(userDao, authDao);

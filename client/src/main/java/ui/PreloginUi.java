@@ -4,11 +4,14 @@ import serverdata.UserContext;
 import model.UserData;
 import model.returnobjects.AuthTokenResponse;
 
+import javax.websocket.DeploymentException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 public class PreloginUi extends Ui {
 
-    public PreloginUi(String serverUrl, State state, UserContext userContext) {
+    public PreloginUi(String serverUrl, State state, UserContext userContext) throws DeploymentException, IOException, URISyntaxException {
         super(serverUrl, state, userContext);
     }
 

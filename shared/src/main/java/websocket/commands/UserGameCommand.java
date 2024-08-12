@@ -17,11 +17,11 @@ public class UserGameCommand {
 
     private final String authToken;
 
-    private final ChessGame gameID;
+    private final int gameID;
 
     private ChessMove move;
 
-    public UserGameCommand(CommandType commandType, String authToken, ChessGame gameID) {
+    public UserGameCommand(CommandType commandType, String authToken, int gameID) {
         this.commandType = commandType;
         this.authToken = authToken;
         this.gameID = gameID;
@@ -42,7 +42,7 @@ public class UserGameCommand {
         return authToken;
     }
 
-    public ChessGame getGameID() {
+    public int getGameID() {
         return gameID;
     }
 

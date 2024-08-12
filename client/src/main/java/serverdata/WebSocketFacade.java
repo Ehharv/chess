@@ -39,7 +39,7 @@ public class WebSocketFacade extends Endpoint implements MessageHandler.Whole<St
         UserGameCommand command = new UserGameCommand(
                 UserGameCommand.CommandType.CONNECT,
                 UserContext.getInstance().getAuthToken(),
-                UserContext.getInstance().getGame()
+                UserContext.getInstance().getGameId()
         );
 
         sendMessage(command);
@@ -49,7 +49,7 @@ public class WebSocketFacade extends Endpoint implements MessageHandler.Whole<St
         UserGameCommand command = new UserGameCommand(
                 UserGameCommand.CommandType.MAKE_MOVE,
                 UserContext.getInstance().getAuthToken(),
-                UserContext.getInstance().getGame()
+                UserContext.getInstance().getGameId()
         );
 
         sendMessage(command);
@@ -59,7 +59,7 @@ public class WebSocketFacade extends Endpoint implements MessageHandler.Whole<St
         UserGameCommand command = new UserGameCommand(
                 UserGameCommand.CommandType.LEAVE,
                 UserContext.getInstance().getAuthToken(),
-                UserContext.getInstance().getGame()
+                UserContext.getInstance().getGameId()
         );
 
         sendMessage(command);
@@ -69,7 +69,7 @@ public class WebSocketFacade extends Endpoint implements MessageHandler.Whole<St
         UserGameCommand command = new UserGameCommand(
                 UserGameCommand.CommandType.RESIGN,
                 UserContext.getInstance().getAuthToken(),
-                UserContext.getInstance().getGame()
+                UserContext.getInstance().getGameId()
         );
 
         sendMessage(command);

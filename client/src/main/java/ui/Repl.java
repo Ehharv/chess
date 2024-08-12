@@ -1,9 +1,13 @@
 package ui;
 
+import model.GameData;
 import serverdata.ServerFacade;
 import serverdata.UserContext;
 import websocket.messages.ServerMessage;
 
+import javax.websocket.DeploymentException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Scanner;
 
 public class Repl {
@@ -17,7 +21,7 @@ public class Repl {
         this.scanner = new Scanner(System.in);
     }
 
-    public void run() {
+    public void run() throws DeploymentException, IOException, URISyntaxException {
         System.out.println("Welcome to Chess. Type 'help' for a list of commands.");
 
         UserContext userContext = UserContext.getInstance();

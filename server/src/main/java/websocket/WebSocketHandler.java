@@ -68,7 +68,7 @@ public class WebSocketHandler {
     private void connect(String message, Session session, int gameId, String authToken)
             throws DataAccessException, IOException {
         sessions.addSessionToGame(gameId, session);
-        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME, gameId);
+        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME, gameDao.getGame(gameId).game());
         sessions.sendMessage(gson.toJson(load), session);
 
         GameData game = gameDao.getGame(gameId);
@@ -107,7 +107,7 @@ public class WebSocketHandler {
         }
 
         // reload game board
-        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME, gameData.gameID());
+        ServerLoadGame load = new ServerLoadGame(ServerMessage.ServerMessageType.LOAD_GAME, gameData.game());
         sessions.broadcastMessage(gameData.gameID(), gson.toJson(load), null);
 
         // notify players what move was made
