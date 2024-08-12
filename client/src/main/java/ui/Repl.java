@@ -2,6 +2,7 @@ package ui;
 
 import serverdata.ServerFacade;
 import serverdata.UserContext;
+import websocket.messages.ServerMessage;
 
 import java.util.Scanner;
 
@@ -68,4 +69,13 @@ public class Repl {
     }
 
 
+    public void notify(ServerMessage notification) {
+        switch(notification.getServerMessageType()){
+            case NOTIFICATION -> System.out.println(notification.getMessage());
+            case ERROR -> System.out.println(notification.getErrorMessage());
+            case LOAD_GAME -> PrintBoard.print(notification.getGame(), UserContext.getInstance().getColor());
+        }
+        printPrompt();
+
+    }
 }
