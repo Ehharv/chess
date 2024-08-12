@@ -21,7 +21,8 @@ public abstract class Ui {
         this.server = new ServerFacade(serverUrl);
         this.userContext = userContext;
         Repl repl = new Repl(serverUrl);
-        this.webSocket = new WebSocketFacade(serverUrl, repl);
+        String webSocketUrl = serverUrl.replace("http", "ws") + "/ws";
+        this.webSocket = new WebSocketFacade("ws://localhost:8080/ws", repl);
     }
 
     public abstract String help();

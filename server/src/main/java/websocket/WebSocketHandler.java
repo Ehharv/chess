@@ -37,7 +37,7 @@ public class WebSocketHandler {
     public void onConnect(Session session) {}
 
     @OnWebSocketClose
-    public void onClose(Session session) {}
+    public void onClose(Session session, int statusCode, String reason) {}
 
     @OnWebSocketError
     public void onError(Throwable error) {}

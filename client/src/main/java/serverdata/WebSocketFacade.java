@@ -8,19 +8,19 @@ import websocket.messages.ServerNotification;
 
 import javax.management.Notification;
 import javax.websocket.*;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class WebSocketFacade extends Endpoint implements MessageHandler.Whole<String> {
-    private Session session;
-    private Repl gameHandler;
+    Session session;
+    Repl gameHandler;
 
     public WebSocketFacade(String url, Repl gameHandler) throws DeploymentException, IOException, URISyntaxException {
         url = url.replace("http", "ws");
-        URI socketURI = new URI(url + "/ws");
+        URI socketURI = new URI("ws://localhost:8080/ws");
         this.gameHandler = gameHandler;
-
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         this.session = container.connectToServer(this, socketURI);
     }
