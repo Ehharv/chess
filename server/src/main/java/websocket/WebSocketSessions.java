@@ -24,8 +24,6 @@ public class WebSocketSessions {
 
     }
 
-    public void removeSessions(Session session){}
-
     public Set<Session> getSessionForGame(GameId gameId) {
         return null;
     }
@@ -34,6 +32,7 @@ public class WebSocketSessions {
     public void sendMessage(String message, Session session) throws IOException {
         if(session.isOpen()){
             session.getRemote().sendString(message);
+            System.out.println("Message sent" + message);
         }
     }
 

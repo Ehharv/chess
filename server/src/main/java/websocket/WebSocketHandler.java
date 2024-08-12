@@ -88,8 +88,20 @@ public class WebSocketHandler {
 
     }
 
-    private void makeMove(Session session, String message, GameData gameData, ChessMove move, String username) throws IOException {
+    private void makeMove(Session session, String message, GameData gameData, ChessMove move, String username)
+            throws IOException {
         ChessGame game = gameData.game();
+
+        if(game.isOver()){
+            ServerError error = new ServerError(ServerMessage.ServerMessageType.ERROR, "Error: game is over");
+            sessions.sendMessage(gson.toJson(error), session);
+        }
+
+        if( !username.equals(gameData.whiteUsername()) || !username.equals(gameData.blackUsername())){
+            ServerError error = new ServerError(ServerMessage.ServerMessageType.ERROR, "Error: you aren't a player");
+            sessions.sendMessage(gson.toJson(error), session);
+        }
+
         // see if the move is ok to make
         try {
             game.makeMove(move);
@@ -134,7 +146,8 @@ public class WebSocketHandler {
 
     }
 
-    private void leaveGame(String message, Session session, GameData game, String username) throws DataAccessException, BadRequestException, IOException {
+    private void leaveGame(String message, Session session, GameData game, String username)
+            throws DataAccessException, BadRequestException, IOException {
         if(game.blackUsername().equals(username)) {
             game = new GameData(game.gameID(), game.whiteUsername(), null, game.gameName(), game.game());
         } else if(game.whiteUsername().equals(username)) {

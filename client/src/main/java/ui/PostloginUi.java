@@ -97,10 +97,6 @@ public class PostloginUi extends Ui{
             server.joinGame(joinParams);
             setState(State.INGAME);
             userContext.setColor(color);
-//            // print board
-//            PrintBoard printer = new PrintBoard();
-//            printer.print(new ChessGame(), ChessGame.TeamColor.WHITE);
-//            printer.print(new ChessGame(), ChessGame.TeamColor.BLACK);
 
             return "Joined Game as " + color;
         }
@@ -114,12 +110,6 @@ public class PostloginUi extends Ui{
             int id = server.getGameId(gameNum);
             // add functionality later
             setState(State.INGAME);
-
-            // print board
-            PrintBoard printer = new PrintBoard();
-            printer.print(new ChessGame(), ChessGame.TeamColor.WHITE);
-            printer.print(new ChessGame(), ChessGame.TeamColor.BLACK);
-
 
             return "Watching game: (not implemented)";
         }
