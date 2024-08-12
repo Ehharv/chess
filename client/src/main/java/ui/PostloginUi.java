@@ -7,11 +7,14 @@ import model.returnobjects.GameId;
 import model.returnobjects.GameList;
 import model.returnobjects.JoinGameRequest;
 
+import javax.websocket.DeploymentException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 public class PostloginUi extends Ui{
 
-    public PostloginUi(String serverUrl, State state, UserContext userContext) {
+    public PostloginUi(String serverUrl, State state, UserContext userContext) throws DeploymentException, IOException, URISyntaxException {
         super(serverUrl, state, userContext);
 
     }
